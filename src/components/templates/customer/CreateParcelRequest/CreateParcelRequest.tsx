@@ -6,7 +6,7 @@ import {
 } from "@/components/atoms/Card";
 import AddPackageSection, {
   INITIAL_PACKAGE,
-} from "@/components/organisms/AddPackageSection";
+} from "@/components/organisms/AddPackageSection/AddPackageSection";
 // import { CreateParcelRequestFormData } from "@/typings/parcel";
 import { FormProvider, useForm } from "react-hook-form";
 import ShipmentSection from "@/components/organisms/ShipmentSection";
@@ -46,7 +46,7 @@ export default function CreateParcelRequest() {
               <h2>
                 <AccordionButton>
                   <Box as="span" flex="1" textAlign="left">
-                    Section 1 title
+                    1. Packages
                   </Box>
                   <AccordionIcon />
                 </AccordionButton>
@@ -68,6 +68,17 @@ export default function CreateParcelRequest() {
               <AccordionPanel pb={4}>
                 <ShipmentSection />
               </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box as="span" flex="1" textAlign="left">
+                    3. Summary
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}></AccordionPanel>
             </AccordionItem>
           </Accordion>
           {/* <Disclosure defaultOpen>

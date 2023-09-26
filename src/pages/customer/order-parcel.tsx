@@ -1,5 +1,5 @@
 import TitleNavbar from "@/components/atoms/TitleNavbar";
-import CreateParcelRequest from "@/components/templates/CreateParcelRequest/CreateParcelRequest";
+import CreateParcelRequest from "@/components/templates/customer/CreateParcelRequest/CreateParcelRequest";
 
 export default function OrderParcel() {
   return (

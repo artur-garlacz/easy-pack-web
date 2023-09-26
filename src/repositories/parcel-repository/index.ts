@@ -20,7 +20,7 @@ export const parcelRepository = ({
         queryString: { parcelNumber },
       });
     },
-    getParcelDeliveries({ page, limit = 6 }) {
+    getParcelDeliveries({ page, limit = 10 }) {
       return fetcher({
         method: "GET",
         route: `api/parcel-deliveries`,

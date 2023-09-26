@@ -58,7 +58,11 @@ export function Sidebar({ className }: SidebarProps) {
               <Package size={20} className="mr-2 text-gray-700" />
               Parcels
             </Button>
-            <Button variant="ghost" className="w-full justify-start">
+            <Button
+              onClick={() => router.push("/delivery/couriers")}
+              variant={isActive("/delivery/couriers")}
+              className="w-full justify-start"
+            >
               <Mailbox size={20} className="mr-2 text-gray-700" />
               Couriers
             </Button>
