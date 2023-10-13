@@ -1,4 +1,4 @@
-import { Sidebar } from "@/components/molecules/Sidebar";
+import { Sidebar } from "@/components/molecules/Sidebar/Sidebar";
 import { PropsWithChildren } from "react";
 
 export function DeliveryDashboardLayout({ children }: PropsWithChildren) {

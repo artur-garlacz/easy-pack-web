@@ -1,5 +1,5 @@
 import { Paginated } from "@/typings/data";
-import { AddressDetails } from "@/typings/requests";
+import { AddressDetails, Package } from "@/typings/requests";
 
 export enum PACKAGE_TYPE {
   "ENVELOPE",
@@ -38,6 +38,7 @@ export type ParcelDelivery = {
   status: PARCEL_STATUS;
   trackingNumber: string;
   createdAt: string;
+  description: string;
   senderDetails: {
     country: string;
     city: string;
@@ -64,6 +65,12 @@ export type ParcelDelivery = {
     lastName: string;
     createdAt: string;
     updatedAt: string;
+  };
+  packages: Package[];
+  user?: {
+    email: string;
+    firstName: string;
+    lastName: string;
   };
 };
 

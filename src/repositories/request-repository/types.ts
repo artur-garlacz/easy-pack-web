@@ -13,4 +13,15 @@ export interface RequestRepository {
     page: number;
     limit?: number;
   }) => Promise<any>;
+  getEstimation: ({
+    type,
+    pickUpAddress,
+    shipmentUpAddress,
+    packagesCount,
+  }: {
+    type: string;
+    pickUpAddress: string;
+    shipmentUpAddress: string;
+    packagesCount: number;
+  }) => Promise<any>;
 }

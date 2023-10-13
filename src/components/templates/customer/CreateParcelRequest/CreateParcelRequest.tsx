@@ -7,9 +7,8 @@ import {
 import AddPackageSection, {
   INITIAL_PACKAGE,
 } from "@/components/organisms/AddPackageSection/AddPackageSection";
-// import { CreateParcelRequestFormData } from "@/typings/parcel";
 import { FormProvider, useForm } from "react-hook-form";
-import ShipmentSection from "@/components/organisms/ShipmentSection";
+import { ShipmentSection } from "@/components/organisms/ShipmentSection/ShipmentSection";
 import {
   Accordion,
   AccordionButton,
@@ -18,6 +17,8 @@ import {
   AccordionPanel,
   Box,
 } from "@chakra-ui/react";
+import { requestRepository } from "@/repositories/request-repository";
+import { useQuery } from "@tanstack/react-query";
 
 export default function CreateParcelRequest() {
   const methods = useForm<any>({
@@ -29,6 +30,22 @@ export default function CreateParcelRequest() {
       packages: [INITIAL_PACKAGE],
     },
   });
+
+  const api = requestRepository({});
+  const {
+    status,
+    data,
+    refetch: refetchList,
+  } = useQuery([api.getEstimation.name, {}], () =>
+    api.getEstimation({
+      packagesCount: 2,
+      pickUpAddress: "Leńcze 73A, 34-142 Leńcze",
+      shipmentUpAddress: "Radocza, Piastowska 140, 34-100 Radocza",
+      type: "OTHER",
+    })
+  );
+
+  console.log("data", data);
   const onSubmit = (data: any) => console.log(data);
 
   return (

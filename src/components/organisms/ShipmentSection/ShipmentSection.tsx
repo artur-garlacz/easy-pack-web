@@ -1,10 +1,11 @@
 import ShipmentForm from "@/components/molecules/ShipmentForm";
+import { SimpleGrid } from "@chakra-ui/react";
 
-export default function ShipmentSection() {
+export function ShipmentSection() {
   return (
-    <div className="flex justify-between gap-12">
+    <SimpleGrid gridTemplateColumns={"auto auto"} gap={20} py={8}>
       <ShipmentForm addressType="pickupAddress" />
       <ShipmentForm addressType="deliveryAddress" />
-    </div>
+    </SimpleGrid>
   );
 }

@@ -12,6 +12,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { PARCEL_STATUS, ParcelDelivery } from "@/typings/parcel";
 import { UpdateParcelDeliveryStatusModal } from "@/components/organisms/UpdateParcelDeliveryStatusModal/UpdateParcelDeliveryStatusModal";
 import { ParcelStatusBadgeWithTooltip } from "@/components/molecules/ParcelStatusBadgeWithTooltip/ParcelStatusBadgeWithTooltip";
+import { PackageItemWithTooltip } from "@/components/organisms/PackageItemWithTooltip/PackageItemWithTooltip";
+import { EpCircle } from "@/components/atoms/EpCircle/EpCircle";
 
 export function ParcelDeliveryTable() {
   const api = parcelRepository({});
@@ -65,6 +67,18 @@ export function ParcelDeliveryTable() {
       },
     },
     {
+      id: "packages",
+      header: "Packages",
+      cell: (props) => {
+        const packages = props.row.original["packages"];
+        return (
+          <Box>
+            <PackageItemWithTooltip packages={packages} />
+          </Box>
+        );
+      },
+    },
+    {
       accessorKey: "createdAt",
       header: "Created at",
       cell: ({ row }) => {
@@ -72,21 +86,44 @@ export function ParcelDeliveryTable() {
           new Date(row.getValue("createdAt")),
           new Date()
         );
+        const isOverdue =
+          numberOfDaysFromCreation &&
+          row.original["status"] === PARCEL_STATUS.CREATED;
+
         return (
           <Flex alignItems="center" gap={1}>
             {dateFormats.common(row.getValue("createdAt"))}
-            {numberOfDaysFromCreation && (
-              <CircleWarnIcon width={18} color="red.500" />
-            )}
+            {isOverdue && <CircleWarnIcon width={18} color="red.500" />}
           </Flex>
         );
       },
+    },
+    {
+      accessorKey: "description",
+      header: "Description",
     },
     {
       accessorKey: "type",
       header: "Type",
       cell: ({ row }) => {
         return <div className="flex space-x-2">{row.getValue("type")}</div>;
+      },
+    },
+    {
+      accessorKey: "user",
+      header: "Assigned to",
+      cell: ({ row }) => {
+        const user = row.original["user"];
+        if (!user) {
+          return <div className="flex space-x-2">-</div>;
+        }
+        return (
+          <EpCircle bg="gray.300" width={10}>
+            <Text color={"black"}>
+              {user.firstName.charAt(0) + user.lastName.charAt(0)}
+            </Text>
+          </EpCircle>
+        );
       },
     },
   ];
@@ -112,7 +149,7 @@ export function ParcelDeliveryTable() {
                   numberOfPages={data.numberOfPages}
                   currentPage={data.currentPage}
                   onPageChange={setPage}
-                  limit={6}
+                  limit={10}
                   totalCount={data.itemsCount}
                 />
               }

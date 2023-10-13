@@ -1,14 +1,10 @@
-import { PARCEL_STATUS } from "@/typings/parcel";
-
 export type Package = {
+  id: string;
   weight: number;
   length: number;
   width: number;
   height: number;
-};
-
-export type Parcel = {
-  packages: Package[];
+  description?: string;
 };
 
 export type CreateParcelRequestFormData = {
@@ -37,16 +33,6 @@ export type CreateParcelRequestFormData = {
   deliveryContact: {};
 };
 
-export type DeliveryRequest = {
-  id: string;
-  createdAt: string;
-  shipmentAt: string;
-  type: string;
-  status: string;
-  parcelStatus: PARCEL_STATUS;
-  trackingNumber: string;
-};
-
 export type AddressDetails = {
   city: string;
   country: string;
@@ -57,4 +43,13 @@ export type AddressDetails = {
   phoneNumber: string;
   firstName: string;
   lastName: string;
+};
+
+export type DeliveryRequest = {
+  id: string;
+  createdAt: string;
+  shipmentAt: string;
+  type: string;
+  status: string;
+  description: string;
 };

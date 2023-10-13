@@ -13,6 +13,15 @@ export const requestRepository = ({
         method: "GET",
         route: `api/users/delivery-requests`,
         queryString: { page, limit },
+        headers,
+      });
+    },
+    getEstimation({ type, pickUpAddress, shipmentUpAddress, packagesCount }) {
+      return fetcher({
+        method: "GET",
+        route: `api/customers/delivery-requests/estimations`,
+        queryString: { type, pickUpAddress, shipmentUpAddress, packagesCount },
+        headers,
       });
     },
   };
