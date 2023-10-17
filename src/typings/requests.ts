@@ -50,6 +50,12 @@ export type DeliveryRequest = {
   createdAt: string;
   shipmentAt: string;
   type: string;
-  status: string;
+  status: DeliveryRequestStatus;
   description: string;
 };
+
+export enum DeliveryRequestStatus {
+  CREATED = "CREATED",
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED",
+}

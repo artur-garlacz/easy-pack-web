@@ -9,6 +9,7 @@ export interface ParcelRepository {
   getParcelDeliveries: ({
     page,
     limit,
+    filters,
   }: {
     filters: {};
     page: number;

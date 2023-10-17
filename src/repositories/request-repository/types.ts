@@ -1,15 +1,10 @@
-import {
-  PARCEL_STATUS,
-  ParcelDeliveryDetailsResponse,
-  ParcelDeliveryResponse,
-} from "@/typings/parcel";
-
 export interface RequestRepository {
   getAllRequests: ({
     page,
     limit,
+    filters,
   }: {
-    filters: {};
+    filters: { status: any };
     page: number;
     limit?: number;
   }) => Promise<any>;

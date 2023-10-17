@@ -1,4 +1,5 @@
 import { backendFetcher as fetcher } from "@/lib/helpers/fetchers/backendFetcher";
+import { removeEmptyProperties } from "@/lib/object";
 import { RequestRepository } from "@/repositories/request-repository/types";
 
 export const requestRepository = ({
@@ -8,11 +9,11 @@ export const requestRepository = ({
 }): RequestRepository => {
   const headers = { authorization: `Bearer ${token}` };
   return {
-    getAllRequests({ page, limit = 10 }) {
+    getAllRequests({ page, filters, limit = 10 }) {
       return fetcher({
         method: "GET",
         route: `api/users/delivery-requests`,
-        queryString: { page, limit },
+        queryString: { page, limit, ...removeEmptyProperties(filters) },
         headers,
       });
     },

@@ -20,14 +20,15 @@ export default function Header() {
           EasyPack
         </a>
         <nav className="flex flex-wrap items-center justify-center pl-24 text-black md:ml-auto md:mr-auto">
-          <a className="mr-5 font-medium hover:text-gray-900">Home</a>
+          <Link className="mr-5 font-medium hover:text-gray-900" href="/">
+            Home
+          </Link>
           <Link
             className="mr-5 font-medium hover:text-gray-900"
             href="/customer/order-parcel"
           >
             Request parcel
           </Link>
-          <a className="font-medium hover:text-gray-900">Contact</a>
         </nav>
         {isAuthenticated ? (
           <DropdownMenu>

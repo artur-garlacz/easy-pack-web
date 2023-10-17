@@ -43,8 +43,8 @@ export function Sidebar({ className }: SidebarProps) {
               Dashboard
             </Button>
             <Button
-              onClick={() => router.push("/delivery")}
-              variant={"ghost"}
+              onClick={() => router.push("/delivery/requests")}
+              variant={isActive("/delivery/requests")}
               className="w-full justify-start"
             >
               <FileBox size={20} className="mr-2 text-gray-700" />

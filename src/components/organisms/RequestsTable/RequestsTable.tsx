@@ -1,35 +1,26 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/atoms/Table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/atoms/Tooltip";
 import { useAuthenticatedSession } from "@/hooks/useAuthenticatedSession";
-import { calculateDateDifference, dateFormats } from "@/lib/date";
-import { parcelStatusMapper } from "@/lib/helpers/parcel-status-mapper";
-import { customerRepository } from "@/repositories/customer-repository";
+import { dateFormats } from "@/lib/date";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
-import cx from "classnames";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
-import { CircleWarnIcon } from "@/components/atoms/Icons/CircleWarn";
 import { WidgetBorderBox } from "@/components/atoms/WidgetBorderBox/WidgetBorderBox";
 import { StyledTable } from "@/components/organisms/StyledTable/StyledTable";
 import { AdvancedPagination } from "@/components/molecules/AdvancedPagination/AdvancedPagination";
-import { requestRepository } from "@/repositories/request-repository";
 import { useState } from "react";
 import { RequestRepository } from "@/repositories/request-repository/types";
-import { PackageItemWithTooltip } from "@/components/organisms/PackageItemWithTooltip/PackageItemWithTooltip";
+import { DropdownFilter } from "@/components/molecules/DropdownFilter/DropdownFilter";
+import { capitalize } from "@/lib/capitalizeString";
+
+export const REQUEST_STATUS_FILTER = {
+  ALL: null,
+  ACCEPTED: "ACCEPTED",
+  CREATED: "CREATED",
+  REJECTED: "REJECTED",
+} as const;
+
+const initialFilters = {
+  status: null,
+};
 
 export function RequestsTable({
   fetchFn,
@@ -38,14 +29,29 @@ export function RequestsTable({
 }) {
   const { token } = useAuthenticatedSession();
   const [page, setPage] = useState<number>(1);
-  const { data, status } = useQuery([fetchFn.name], async () =>
-    fetchFn({ page, filters: {} })
+  const [filters, setFilters] = useState(initialFilters);
+  const { data, status } = useQuery([fetchFn.name, filters], async () =>
+    fetchFn({ page, filters })
   );
+
+  const onChangeFilter = (name: string, value: string | null) => {
+    setFilters({ ...filters, [name]: value });
+  };
 
   const columnHelper = createColumnHelper<any>();
   const columns: ColumnDef<any>[] = [
     columnHelper.accessor("id", {
       header: "Id",
+    }),
+    columnHelper.accessor("trackingNumber", {
+      header: "Tracking Number",
+      cell: ({ row }) => {
+        return (
+          <Flex alignItems="center" gap={1}>
+            {row.getValue("trackingNumber") || "-"}
+          </Flex>
+        );
+      },
     }),
     columnHelper.accessor("status", {
       header: "Status",
@@ -64,7 +70,18 @@ export function RequestsTable({
 
   return (
     <div className="bg-white">
-      <WidgetBorderBox title="Delivery requests">
+      <WidgetBorderBox
+        title="Delivery requests"
+        headerButtons={
+          <DropdownFilter
+            items={Object.entries(REQUEST_STATUS_FILTER).map(
+              ([key, value]) => ({ label: capitalize(key), value })
+            )}
+            value={filters.status}
+            onSelect={(val) => onChangeFilter("status", val)}
+          />
+        }
+      >
         {status === "error" && (
           <Text>An error occurred while loading delivery requests.</Text>
         )}

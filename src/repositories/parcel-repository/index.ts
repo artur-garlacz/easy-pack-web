@@ -1,5 +1,6 @@
 import { backendFetcher as fetcher } from "@/lib/helpers/fetchers/backendFetcher";
 import { ParcelRepository } from "@/repositories/parcel-repository/types";
+import { removeEmptyProperties } from "@/lib/object";
 import { ParcelDetails } from "@/typings/parcel";
 
 export const parcelRepository = ({
@@ -20,11 +21,11 @@ export const parcelRepository = ({
         queryString: { parcelNumber },
       });
     },
-    getParcelDeliveries({ page, limit = 10 }) {
+    getParcelDeliveries({ page, filters, limit = 10 }) {
       return fetcher({
         method: "GET",
         route: `api/parcel-deliveries`,
-        queryString: { page, limit },
+        queryString: { page, limit, ...removeEmptyProperties(filters) },
       });
     },
     getParcelDeliveryDetails({ parcelId }) {

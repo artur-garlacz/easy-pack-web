@@ -7,10 +7,22 @@ export const WidgetBorderBox = (
     flexMarginBottom?: number;
   } & BoxProps
 ) => {
-  const { children, headerButtons, title, flexMarginBottom, ...boxProps } = props;
+  const { children, headerButtons, title, flexMarginBottom, ...boxProps } =
+    props;
   return (
-    <Box borderRadius={"md"} border="1px" borderColor="gray.300" p={8} mb={6} {...boxProps}>
-      <Flex justifyContent={"space-between"} alignItems={"center"} mb={flexMarginBottom || 6}>
+    <Box
+      borderRadius={"md"}
+      border="1px"
+      borderColor="gray.300"
+      p={8}
+      mb={6}
+      {...boxProps}
+    >
+      <Flex
+        justifyContent={"flex-start"}
+        alignItems={"center"}
+        mb={flexMarginBottom || 6}
+      >
         <Text fontSize={"2xl"} fontWeight={700}>
           {title}
         </Text>

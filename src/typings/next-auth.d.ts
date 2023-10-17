@@ -3,6 +3,7 @@ import type NextAuth, { type DefaultSession, type DefaultJWT } from "next-auth";
 
 interface UserData {
   data: {
+    userId: string;
     email: string;
     firstName: string;
     lastName: string;

@@ -14,9 +14,23 @@ import { UpdateParcelDeliveryStatusModal } from "@/components/organisms/UpdatePa
 import { ParcelStatusBadgeWithTooltip } from "@/components/molecules/ParcelStatusBadgeWithTooltip/ParcelStatusBadgeWithTooltip";
 import { PackageItemWithTooltip } from "@/components/organisms/PackageItemWithTooltip/PackageItemWithTooltip";
 import { EpCircle } from "@/components/atoms/EpCircle/EpCircle";
+import { DropdownFilter } from "@/components/molecules/DropdownFilter/DropdownFilter";
+import { capitalize } from "@/lib/capitalizeString";
+import { useAuthenticatedSession } from "@/hooks/useAuthenticatedSession";
+
+export const PARCEL_STATUS_FILTER = {
+  ALL: null,
+  ...PARCEL_STATUS,
+} as const;
+
+const initialFilters = {
+  status: null,
+  assignedTo: null,
+};
 
 export function ParcelDeliveryTable() {
   const api = parcelRepository({});
+  const { data: userData } = useAuthenticatedSession();
   const [selectedParcelId, setSelectedParcelId] = useState<string | null>(null);
   const [selectedParcel, setSelectedParcel] = useState<{
     parcel: ParcelDelivery;
@@ -27,17 +41,29 @@ export function ParcelDeliveryTable() {
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
   } = useDisclosure();
+  const [filters, setFilters] = useState(initialFilters);
   const [page, setPage] = useState<number>(1);
   const {
     status,
     data,
     refetch: refetchList,
-  } = useQuery([api.getParcelDeliveries.name, { page }], () =>
+  } = useQuery([api.getParcelDeliveries.name, { page, filters }], () =>
     api.getParcelDeliveries({
       page,
-      filters: {},
+      filters,
     })
   );
+
+  console.log(userData);
+
+  const PARCEL_USER_FILTER = {
+    ALL: null,
+    ME: userData?.userId,
+  };
+
+  const onChangeFilter = (name: string, value: string | null) => {
+    setFilters({ ...filters, [name]: value });
+  };
 
   const columns: ColumnDef<ParcelDelivery>[] = [
     {
@@ -130,7 +156,19 @@ export function ParcelDeliveryTable() {
 
   return (
     <div className="bg-white">
-      <WidgetBorderBox title="Parcel deliveries">
+      <WidgetBorderBox
+        title="Parcel deliveries"
+        headerButtons={
+          <DropdownFilter
+            items={Object.entries(PARCEL_STATUS_FILTER).map(([key, value]) => ({
+              label: capitalize(key),
+              value,
+            }))}
+            value={filters.status}
+            onSelect={(val) => onChangeFilter("status", val)}
+          />
+        }
+      >
         {status === "error" && (
           <Text>An error occurred while loading parcel deliveries.</Text>
         )}

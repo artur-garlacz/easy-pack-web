@@ -29,7 +29,7 @@ export default function App({
             <Hydrate state={pageProps.dehydratedState}>
               <ChakraProvider theme={themeExtension}>
                 {/* <Fonts /> */}
-                <Header />
+                {/* <Header /> */}
                 <Component {...pageProps} />
                 <ToastProvider>
                   <Toast />
