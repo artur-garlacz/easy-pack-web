@@ -41,6 +41,7 @@ interface TableWithProps<T> {
   onRowHover?: (index: number | null) => void;
   rowStyles?: (data: T) => CSSProperties | undefined;
   hoverElement?: number | null;
+  staticRowsCount: number;
 }
 
 export function StyledTable<
@@ -60,6 +61,7 @@ export function StyledTable<
   onRowHover,
   hoverElement = null,
   setSelectedElement,
+  staticRowsCount,
 }: TableWithProps<T>) {
   const table = useWrappedReactTable({
     data,
@@ -75,9 +77,13 @@ export function StyledTable<
     return noDataInfoElement || <Text>No data to display</Text>;
   }
 
+  const emptyRowsCount = staticRowsCount - table.getRowModel().rows.length;
   return (
     <>
-      <TableContainer {...containerProps}>
+      <TableContainer
+        {...containerProps}
+        mb={emptyRowsCount > 0 ? emptyRowsCount * 73 : 0}
+      >
         <Table onMouseLeave={() => onRowHover?.(null)}>
           <Thead>
             <Tr>
@@ -176,6 +182,21 @@ export function StyledTable<
                 })}
               </Tr>
             ))}
+            {/* {emptyRowsCount > 0 &&
+              new Array(emptyRowsCount).fill(0).map((s, idx) => (
+                <Tr key={idx} h={73}>
+                  {table.getAllColumns().map((cell) => {
+                    return (
+                      <Td
+                        zIndex={1}
+                        key={cell.id}
+                        borderBottomColor={"gray.300"}
+                        pl={0}
+                      ></Td>
+                    );
+                  })}
+                </Tr>
+              ))} */}
           </Tbody>
         </Table>
       </TableContainer>

@@ -1,5 +1,6 @@
 import {
   PARCEL_STATUS,
+  ParcelDeliveriesStatsResponse,
   ParcelDeliveryDetailsResponse,
   ParcelDeliveryResponse,
 } from "@/typings/parcel";
@@ -15,6 +16,7 @@ export interface ParcelRepository {
     page: number;
     limit?: number;
   }) => Promise<ParcelDeliveryResponse>;
+  getParcelDeliveriesStats: () => Promise<ParcelDeliveriesStatsResponse>;
   getParcelDeliveryDetails: ({
     parcelId,
   }: {

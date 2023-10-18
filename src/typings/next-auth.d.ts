@@ -20,7 +20,7 @@ declare module "next-auth" {
   interface User {
     accessToken: string;
     refreshToken: string;
-    data?: UserData["data"];
+    data?: UserData;
   }
 }
 

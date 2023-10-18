@@ -28,6 +28,12 @@ export const parcelRepository = ({
         queryString: { page, limit, ...removeEmptyProperties(filters) },
       });
     },
+    getParcelDeliveriesStats() {
+      return fetcher({
+        method: "GET",
+        route: `api/parcel-deliveries/stats`,
+      });
+    },
     getParcelDeliveryDetails({ parcelId }) {
       return fetcher({
         method: "GET",

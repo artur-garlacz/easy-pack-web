@@ -30,7 +30,7 @@ const initialFilters = {
 
 export function ParcelDeliveryTable() {
   const api = parcelRepository({});
-  const { data: userData } = useAuthenticatedSession();
+  const { user } = useAuthenticatedSession();
   const [selectedParcelId, setSelectedParcelId] = useState<string | null>(null);
   const [selectedParcel, setSelectedParcel] = useState<{
     parcel: ParcelDelivery;
@@ -54,12 +54,10 @@ export function ParcelDeliveryTable() {
     })
   );
 
-  console.log(userData);
-
-  const PARCEL_USER_FILTER = {
-    ALL: null,
-    ME: userData?.userId,
-  };
+  // const PARCEL_USER_FILTER = {
+  //   ALL: null,
+  //   ME: user?.,
+  // };
 
   const onChangeFilter = (name: string, value: string | null) => {
     setFilters({ ...filters, [name]: value });
@@ -155,8 +153,10 @@ export function ParcelDeliveryTable() {
   ];
 
   return (
-    <div className="bg-white">
+    <Flex alignItems="center" w="full" h="full">
       <WidgetBorderBox
+        w="full"
+        bg="white"
         title="Parcel deliveries"
         headerButtons={
           <DropdownFilter
@@ -180,6 +180,7 @@ export function ParcelDeliveryTable() {
         {status === "success" && (
           <>
             <StyledTable
+              staticRowsCount={10}
               columns={columns}
               data={data.data}
               paginationElement={
@@ -223,6 +224,6 @@ export function ParcelDeliveryTable() {
           </>
         )}
       </WidgetBorderBox>
-    </div>
+    </Flex>
   );
 }

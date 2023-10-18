@@ -69,8 +69,10 @@ export function RequestsTable({
   ];
 
   return (
-    <div className="bg-white">
+    <Flex alignItems="center" w="full" h="full">
       <WidgetBorderBox
+        w="full"
+        bg="white"
         title="Delivery requests"
         headerButtons={
           <DropdownFilter
@@ -93,6 +95,7 @@ export function RequestsTable({
         {status === "success" && (
           <>
             <StyledTable
+              staticRowsCount={10}
               columns={columns}
               data={data.data}
               paginationElement={
@@ -111,6 +114,6 @@ export function RequestsTable({
           </>
         )}
       </WidgetBorderBox>
-    </div>
+    </Flex>
   );
 }

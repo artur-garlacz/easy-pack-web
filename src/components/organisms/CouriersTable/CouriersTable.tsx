@@ -1,17 +1,10 @@
-import { parcelRepository } from "@/repositories/parcel-repository";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { WidgetBorderBox } from "@/components/atoms/WidgetBorderBox/WidgetBorderBox";
 import { StyledTable } from "@/components/organisms/StyledTable/StyledTable";
 import { Flex, Box, Spinner, Text, useDisclosure } from "@chakra-ui/react";
-import { calculateDateDifference, dateFormats } from "@/lib/date";
-import { CircleWarnIcon } from "@/components/atoms/Icons/CircleWarn";
 import { AdvancedPagination } from "@/components/molecules/AdvancedPagination/AdvancedPagination";
-import { ParcelDeliveryDetailsDrawer } from "@/components/organisms/ParcelDelivery/ParcelDeliveryDetails/ParcelDeliveryDetailsDrawer";
 import { ColumnDef } from "@tanstack/react-table";
-import { PARCEL_STATUS, ParcelDelivery } from "@/typings/parcel";
-import { UpdateParcelDeliveryStatusModal } from "@/components/organisms/UpdateParcelDeliveryStatusModal/UpdateParcelDeliveryStatusModal";
-import { ParcelStatusBadgeWithTooltip } from "@/components/molecules/ParcelStatusBadgeWithTooltip/ParcelStatusBadgeWithTooltip";
 import { courierRepository } from "@/repositories/courier-repository";
 import { Courier } from "@/typings/user";
 
@@ -60,8 +53,8 @@ export function CouriersTable() {
   ];
 
   return (
-    <div className="bg-white">
-      <WidgetBorderBox title="Couriers">
+    <Flex alignItems="center" w="full" h="full">
+      <WidgetBorderBox w="full" bg="white" title="Couriers">
         {status === "error" && (
           <Text>An error occurred while loading couriers.</Text>
         )}
@@ -73,6 +66,7 @@ export function CouriersTable() {
         {status === "success" && (
           <>
             <StyledTable
+              staticRowsCount={10}
               columns={columns}
               data={data.data}
               paginationElement={
@@ -80,7 +74,7 @@ export function CouriersTable() {
                   numberOfPages={data.numberOfPages}
                   currentPage={data.currentPage}
                   onPageChange={setPage}
-                  limit={6}
+                  limit={10}
                   totalCount={data.itemsCount}
                 />
               }
@@ -116,6 +110,6 @@ export function CouriersTable() {
           </>
         )}
       </WidgetBorderBox>
-    </div>
+    </Flex>
   );
 }

@@ -79,3 +79,9 @@ export type ParcelDeliveryDetailsResponse = {
   details: ParcelDelivery;
   history: { createdAt: string; status: PARCEL_STATUS }[];
 };
+
+export type ParcelDeliveriesStatsResponse = {
+  totalParcelsCount: number;
+  unresolvedParcelsCount: number;
+  deliveredParcelsCount: number;
+};

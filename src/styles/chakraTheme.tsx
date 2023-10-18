@@ -64,9 +64,6 @@ const Text = defineStyleConfig({
 const theme = {
   styles: {
     global: {
-      body: {
-        overflowY: "scroll",
-      },
       "td, th": {
         fontVariantNumeric: "normal !important",
       },

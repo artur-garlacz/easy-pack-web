@@ -84,7 +84,7 @@ export const authOptions: NextAuthOptions = {
           if (!userResponse) {
             return null;
           }
-          // CUSTOMER
+
           return { ...token, data: userResponse, type: "DELIVERY" };
         }
 
@@ -102,28 +102,13 @@ export const authOptions: NextAuthOptions = {
     signIn: "/panel/auth/signin",
   },
   callbacks: {
-    // async signIn(data: any) {
-    //   // const userResponse = await getCustomerData(user?.accessToken as string);
-
-    //   // console.log("userResponse", userResponse);
-
-    //   // if (!userResponse) {
-    //   //   console.log("Bad user response");
-    //   //   return false;
-    //   // }
-
-    //   // user.data = userResponse as any;
-    //   // user.data = userResponse;
-
-    //   return true;
-    // },
-
     async jwt({ token, user }) {
       if (!token.user && user?.data) {
         token.user = {
           ...user,
         };
       }
+
       return token;
     },
 

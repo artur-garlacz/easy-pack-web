@@ -15,7 +15,6 @@ export const WidgetBorderBox = (
       border="1px"
       borderColor="gray.300"
       p={8}
-      mb={6}
       {...boxProps}
     >
       <Flex
