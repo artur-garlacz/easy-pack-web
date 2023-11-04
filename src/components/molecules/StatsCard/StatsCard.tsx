@@ -1,12 +1,5 @@
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/atoms/Card";
-import { Separator } from "@/components/atoms/Separator";
-import { Card, CardBody, CardHeader, Text } from "@chakra-ui/react";
+import { WidgetBorderBox } from "@/components/atoms/WidgetBorderBox/WidgetBorderBox";
+import { Card, Flex, Text } from "@chakra-ui/react";
 import { LayoutDashboard } from "lucide-react";
 
 type StatsCardProps = {
@@ -18,32 +11,37 @@ type StatsCardProps = {
 
 export default function StatsCard({
   title,
-  description,
   loading = false,
   value = 0,
 }: StatsCardProps) {
   return (
-    <Card
-      direction={{ base: "row", sm: "row" }}
-      overflow="hidden"
-      variant="outline"
+    <WidgetBorderBox
       p={4}
+      gap={2}
+      w="100%"
+      bg="white"
+      display="flex"
+      justifyContent="flex-start"
+      alignItems="center"
     >
-      <div className="flex p-2 rounded-full bg-slate-100">
-        <LayoutDashboard className="text-gray-600" />
-      </div>
-      {/* <CardHeader className="flex space-y-0 flex-row items-start justify-between"> */}
+      <Flex
+        p={2}
+        w={14}
+        h={14}
+        justifyContent="center"
+        alignItems="center"
+        className="rounded-full bg-slate-100"
+      >
+        <LayoutDashboard className="text-gray-800" />
+      </Flex>
       <div className="flex flex-col space-y-1.5">
         <Text fontWeight={600} fontSize={18}>
           {title}
         </Text>
-        <Text>{description}</Text>
+        <Text fontWeight={600} color="gray.800" m={0}>
+          {value}
+        </Text>
       </div>
-
-      {/* </CardHeader> */}
-      {/* <CardBody>
-        <h3 className="text-xl font-medium">{value}</h3>
-      </CardBody> */}
-    </Card>
+    </WidgetBorderBox>
   );
 }

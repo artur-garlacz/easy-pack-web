@@ -52,5 +52,17 @@ export const parcelRepository = ({
         },
       });
     },
+    assignUserToParcel({ parcelId, userId }) {
+      return fetcher({
+        method: "PATCH",
+        route: `api/parcel-deliveries/${parcelId}/assigned-users`,
+        payload: {
+          userId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
   };
 };

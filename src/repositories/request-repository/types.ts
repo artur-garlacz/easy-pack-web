@@ -1,3 +1,5 @@
+import { RequestFormSchema } from "@/typings/requests";
+
 export interface RequestRepository {
   getAllRequests: ({
     page,
@@ -8,6 +10,7 @@ export interface RequestRepository {
     page: number;
     limit?: number;
   }) => Promise<any>;
+  createRequest: (requst: RequestFormSchema) => Promise<any>;
   getEstimation: ({
     type,
     pickUpAddress,

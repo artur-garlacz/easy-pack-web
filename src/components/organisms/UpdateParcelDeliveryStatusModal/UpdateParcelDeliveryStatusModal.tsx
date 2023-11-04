@@ -14,7 +14,6 @@ import {
   useToast,
   Heading,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { PARCEL_STATUS, ParcelDelivery } from "@/typings/parcel";
 import { parcelRepository } from "@/repositories/parcel-repository";
@@ -60,6 +59,7 @@ export const UpdateParcelDeliveryStatusModal = ({
       onClose={onClose}
       size="2xl"
       closeOnOverlayClick={false}
+      isCentered
     >
       <ModalOverlay />
       <ModalContent>
@@ -80,7 +80,8 @@ export const UpdateParcelDeliveryStatusModal = ({
         </ModalBody>
         <ModalFooter gap="3">
           <Button
-            colorScheme="blackAlpha"
+            bg="gray.600"
+            color="white"
             onClick={() => {
               mutation.mutate();
             }}

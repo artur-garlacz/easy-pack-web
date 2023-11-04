@@ -62,7 +62,7 @@ export default function SignIn() {
           </CardContent>
           <CardFooter className="justify-between">
             <Button type="submit" className="bg-transparent text-black p-0">
-              Don't have an account? Sign up
+              {"Don't have an account? Sign up"}
             </Button>
             <Button>Sign in</Button>
           </CardFooter>

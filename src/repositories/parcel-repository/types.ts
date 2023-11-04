@@ -28,5 +28,12 @@ export interface ParcelRepository {
   }: {
     parcelId: string;
     status: PARCEL_STATUS;
-  }) => Promise<ParcelDeliveryDetailsResponse>;
+  }) => Promise<void>;
+  assignUserToParcel: ({
+    parcelId,
+    userId,
+  }: {
+    parcelId: string;
+    userId: string;
+  }) => Promise<void>;
 }

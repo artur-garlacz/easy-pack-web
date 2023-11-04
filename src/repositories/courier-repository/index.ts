@@ -15,5 +15,15 @@ export const courierRepository = ({
         queryString: { page, limit },
       });
     },
+    createCourier(payload) {
+      return fetcher({
+        method: "POST",
+        route: `api/users`,
+        payload,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
   };
 };

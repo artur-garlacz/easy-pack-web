@@ -7,6 +7,7 @@ interface UserData {
     email: string;
     firstName: string;
     lastName: string;
+    role: "COURIER" | "OWNER";
   };
   type: UserType;
   accessToken: string;

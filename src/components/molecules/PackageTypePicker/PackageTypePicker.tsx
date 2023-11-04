@@ -1,42 +1,60 @@
 import { useState } from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { BaggageClaim, Mail, Package } from "lucide-react";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import { PACKAGE_TYPE, RequestFormSchema } from "@/typings/requests";
 
 const parcelTypes = [
   {
-    name: "Envelope",
+    type: PACKAGE_TYPE.ENVELOPE,
     Icon: Mail,
   },
   {
-    name: "Parcel",
+    type: PACKAGE_TYPE.BOX,
     Icon: Package,
   },
   {
-    name: "Palette",
+    type: PACKAGE_TYPE.OTHER,
     Icon: BaggageClaim,
   },
 ];
 
-export default function PackageTypePicker() {
-  const [selected, setSelected] = useState(parcelTypes[0]);
+export default function PackageTypePicker({ index }: { index: number }) {
+  const { setValue, watch } = useFormContext<RequestFormSchema>();
+  const packages = watch("packages");
+
+  const onSelect = (type: PACKAGE_TYPE) => {
+    const updatedPackages = packages.map((p, key) =>
+      key === index ? { ...p, type } : p
+    );
+
+    setValue("packages", updatedPackages);
+  };
+
+  const currPackage = packages.find((_, key) => key === index);
 
   return (
     <Flex flexDirection="column" gap={3}>
-      {parcelTypes.map(({ name, Icon }) => (
+      {parcelTypes.map(({ type, Icon }) => (
         <Button
-          bg={selected.name === name ? "gray.300" : "gray.100"}
-          key={name}
+          variant="outline"
+          bg={currPackage?.type === type ? "rgba(168, 196, 154, 0.2)" : "white"}
+          _hover={{
+            backgroundColor: "rgba(168, 196, 154, 0.4)",
+          }}
+          key={`${index}.${type}`}
+          onClick={() => onSelect(type)}
         >
-          <Icon className="mr-4 text-gray-600" />
+          <Icon strokeWidth={1} className="mr-4 text-gray-600" />
           <Text
             width="full"
             color="gray.600"
-            fontWeight={600}
+            fontWeight={500}
             textTransform="uppercase"
             textAlign="left"
             lineHeight="initial"
           >
-            {name}
+            {type}
           </Text>
         </Button>
       ))}

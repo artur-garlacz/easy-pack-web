@@ -3,7 +3,7 @@ import { Box, BoxProps, Flex, Text } from "@chakra-ui/react";
 export const WidgetBorderBox = (
   props: {
     headerButtons?: React.ReactNode;
-    title: string;
+    title?: string;
     flexMarginBottom?: number;
   } & BoxProps
 ) => {
@@ -22,9 +22,11 @@ export const WidgetBorderBox = (
         alignItems={"center"}
         mb={flexMarginBottom || 6}
       >
-        <Text fontSize={"2xl"} fontWeight={700}>
-          {title}
-        </Text>
+        {title && (
+          <Text fontSize={"2xl"} fontWeight={700}>
+            {title}
+          </Text>
+        )}
         {headerButtons}
       </Flex>
       {children}

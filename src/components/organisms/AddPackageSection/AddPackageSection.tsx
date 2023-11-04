@@ -1,9 +1,9 @@
-"use client";
-import AddPackageForm from "@/components/molecules/AddPackageForm";
-import PackageTypePicker from "@/components/molecules/PackageTypePicker";
-import { PACKAGE_TYPE } from "@/typings/parcel";
+import AddPackageForm from "@/components/molecules/AddPackageForm/AddPackageForm";
+import PackageTypePicker from "@/components/molecules/PackageTypePicker/PackageTypePicker";
+import { PACKAGE_TYPE, RequestFormSchema } from "@/typings/requests";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { TrashIcon as OutlinedTrashIcon } from "@heroicons/react/24/outline";
+import { Trash } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
 export const INITIAL_PACKAGE = {
@@ -15,10 +15,12 @@ export const INITIAL_PACKAGE = {
 } as const;
 
 export default function AddPackageSection() {
-  const { setValue, getValues, watch } = useFormContext<any>();
+  const { setValue, watch } = useFormContext<RequestFormSchema>();
 
   const packages = watch("packages");
   const additionalPackages = packages.slice(1);
+
+  console.log(packages);
 
   const handleAddAdditionalPackage = () => {
     setValue("packages", [...packages, INITIAL_PACKAGE]);
@@ -32,37 +34,25 @@ export default function AddPackageSection() {
   return (
     <>
       <div className="grid grid-cols-[1fr,1fr,1fr] py-4 pb-6 gap-y-8">
-        <div className="pr-4">
-          <p className="pb-2 text-md">Package type</p>
-          <div style={{ maxWidth: "200px" }}>
-            <PackageTypePicker />
-          </div>
-        </div>
-        <div className="mx-auto">
-          <AddPackageForm packageIndex={0} />
-        </div>
-        <div></div>
+        <AddPackageForm packageIndex={0} />
       </div>
       {!!additionalPackages.length &&
         additionalPackages.map((_, idx) => (
           <div
-            className="grid grid-cols-[1fr,1fr,1fr] py-6 border-t border-gray-200"
-            key={idx}
+            className="grid grid-cols-[1fr,1fr,1fr] py-8 border-t border-gray-200"
+            key={idx + 1}
           >
-            <div className=""></div>
-            <div className="mx-auto">
-              <>
-                <div className="flex items-center gap-12">
-                  <AddPackageForm packageIndex={idx} key={idx} />
-                </div>
-              </>
-            </div>
+            <AddPackageForm packageIndex={idx + 1} />
+
             <div className="flex justify-center items-center">
               <button
-                onClick={() => handleRemoveAdditionalPackage(idx)}
-                className="bg-gray-200 h-10 w-10 flex justify-center items-center rounded-full"
+                onClick={() => handleRemoveAdditionalPackage(idx + 1)}
+                className="bg-gray-200 h-12 w-12 flex justify-center items-center rounded-full"
               >
-                <OutlinedTrashIcon className="h-6 text-black hover:text-black cursor-pointer" />
+                <Trash
+                  strokeWidth={1}
+                  className="h-6 text-black hover:text-gray-500 cursor-pointer"
+                />
               </button>
             </div>
           </div>

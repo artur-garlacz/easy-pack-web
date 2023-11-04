@@ -10,13 +10,17 @@ import {
 import { Input } from "@/components/atoms/Input";
 import { useToast } from "@/components/atoms/use-toast";
 import { useAuthenticatedSession } from "@/hooks/useAuthenticatedSession";
+import { useErrorToast } from "@/hooks/useToast/useErrorToast";
 import { customerRepository } from "@/repositories/customer-repository";
+import { userRepository } from "@/repositories/user-repository";
 import { SignUpFormData } from "@/typings/auth";
+import { UserType } from "@/typings/user";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
-export default function SignUpView() {
+export default function SignUpView({ type }: { type: UserType }) {
   const { register, handleSubmit } = useForm<SignUpFormData>({
     defaultValues: {
       email: "",
@@ -25,60 +29,48 @@ export default function SignUpView() {
       lastName: "",
     },
   });
-  const repo = customerRepository({});
+  const customerRepo = customerRepository({});
+  const userRepo = userRepository({});
   const { toast } = useToast();
+  const { push } = useRouter();
+  const errorToast = useErrorToast();
+  const isCustomer = type === UserType.CUSTOMER;
 
   const signUpCustomer = useMutation(
     (payload: SignUpFormData) => {
-      return repo.signUpCustomer({ ...payload });
+      const signUp = isCustomer
+        ? customerRepo.signUpCustomer
+        : userRepo.signUpUser;
+      return signUp(payload);
     },
     {
-      onSuccess: (response) => {
-        console.log(response);
-        if (response.statusCode === 400) {
-          toast({
-            title: "An error has occured when trying to sign up",
-          });
-          //   errorToast({
-          //     title: "Could not assign members with IDs:",
-          //     message: response.rejectedMemberIds.join(", "),
-          //   });
-        } else {
-          //   toast({
-          //     title: "Success",
-          //     description: "Assigned members succesfully",
-          //     status: "success",
-          //   });
-        }
+      onSuccess: () => {
+        toast({
+          title: "Success",
+          description: "Successfully registered",
+          status: "success",
+        });
+        const redirectUrl = isCustomer
+          ? "/customer/auth/signin"
+          : "/delivery/auth/signin";
+        push(redirectUrl);
       },
       onError: (e) => {
-        console.log(e);
-        toast({
-          title: "An error has occured when trying to sign up",
+        errorToast({
+          message: "An error has occured when trying to sign up",
         });
-
-        // errorToast({
-        //   message: "An error has occured when trying to assign users",
-        // });
       },
     }
   );
 
-  const onSubmit = async (values: SignUpFormData) => {
-    // const res = await signIn("credentials", {
-    //   email,
-    //   password,
-    //   redirect: true,
-    //   callbackUrl: "/",
-    // });
-
+  const onSubmit = handleSubmit(async (values: SignUpFormData) => {
     signUpCustomer.mutate({ ...values });
-  };
+  });
 
   return (
     <div className="w-full h-[calc(100vh_-_4rem)] flex items-center justify-center">
       <Card className="xl:w-1/3 xl:max-w-lg md:w-1/2 w-9/10">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmit}>
           <CardHeader>
             <CardTitle>Sign Up</CardTitle>
             <CardDescription>

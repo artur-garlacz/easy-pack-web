@@ -26,7 +26,7 @@ export default function SignIn() {
   });
 
   const onSubmit = async ({ email, password }: LoginFormData) => {
-    const res = await signIn("UserCredentials", {
+    await signIn("UserCredentials", {
       email,
       password,
       redirect: true,
@@ -40,15 +40,11 @@ export default function SignIn() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardHeader>
             <CardTitle>Sign In</CardTitle>
-            <CardDescription>
-              Create account and enjoy all functionalities.
-            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <Input
               id="email"
               label="E-mail"
-              defaultValue="Pedro Duarte"
               {...register("email", { required: true })}
             />
             <Input
@@ -60,7 +56,7 @@ export default function SignIn() {
           </CardContent>
           <CardFooter className="justify-between">
             <Button className="hover:bg-transparent bg-transparent text-black hover:text-gray p-0">
-              <Link href="/customer/auth/signup">
+              <Link href="/delivery/auth/signup">
                 Dont have an account? Sign up
               </Link>
             </Button>

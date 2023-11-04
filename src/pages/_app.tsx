@@ -9,10 +9,8 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React, { ReactNode, useState } from "react";
-// import { Favicon } from "components/atoms/Favicon/Favicon";
 import themeExtension from "@/styles/chakraTheme";
 import "./globals.css";
-import Header from "@/components/molecules/Header";
 import { Toast, ToastProvider } from "@/components/atoms/Toast";
 
 export default function App({
@@ -29,7 +27,6 @@ export default function App({
             <Hydrate state={pageProps.dehydratedState}>
               <ChakraProvider theme={themeExtension}>
                 {/* <Fonts /> */}
-                {/* <Header /> */}
                 <Component {...pageProps} />
                 <ToastProvider>
                   <Toast />

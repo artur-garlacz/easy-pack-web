@@ -22,7 +22,7 @@ export const customerRepository = ({ token }: { token?: string }) => {
     async signUpCustomer(payload: SignUpFormData) {
       return fetcher({
         method: "POST",
-        route: `api/customers/signup`,
+        route: `api/customers/sign-up`,
         payload,
       });
     },

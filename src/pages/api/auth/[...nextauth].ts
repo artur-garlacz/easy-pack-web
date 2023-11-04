@@ -98,9 +98,6 @@ export const authOptions: NextAuthOptions = {
       issuer: process.env.AWS_COGNITO_ISSUER as string,
     }),
   ],
-  pages: {
-    signIn: "/panel/auth/signin",
-  },
   callbacks: {
     async jwt({ token, user }) {
       if (!token.user && user?.data) {
@@ -116,6 +113,10 @@ export const authOptions: NextAuthOptions = {
       session.user = token.user;
       return session;
     },
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 60, // 1 hour
   },
   cookies: {
     state: {

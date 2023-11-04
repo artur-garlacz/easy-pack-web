@@ -1,11 +1,5 @@
 import { Paginated } from "@/typings/data";
-import { AddressDetails, Package } from "@/typings/requests";
-
-export enum PACKAGE_TYPE {
-  "ENVELOPE",
-  "BOX",
-  "OTHER",
-}
+import { AddressDetails, Package, PACKAGE_TYPE } from "@/typings/requests";
 
 export type ParcelDetails = {
   id: string;
@@ -30,41 +24,16 @@ export enum PARCEL_STATUS {
 }
 
 // parcel deliveries
-
 export type ParcelDelivery = {
   id: string;
   type: PACKAGE_TYPE;
   status: PARCEL_STATUS;
   trackingNumber: string;
   createdAt: string;
+  price: string;
+  pickupAt: string;
+  shipmentAt: string;
   description: string;
-  senderDetails: {
-    country: string;
-    city: string;
-    street: string;
-    postalCode: string;
-    locationNumber: string;
-    email: string;
-    phoneNumber: string;
-    firstName: string;
-    lastName: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-  recipientDetails: {
-    id: string;
-    country: string;
-    city: string;
-    street: string;
-    postalCode: string;
-    locationNumber: string;
-    email: string;
-    phoneNumber: string;
-    firstName: string;
-    lastName: string;
-    createdAt: string;
-    updatedAt: string;
-  };
   packages: Package[];
   user?: {
     email: string;
@@ -73,15 +42,33 @@ export type ParcelDelivery = {
   };
 };
 
+export type ParcelDeliveryDetails = ParcelDelivery & {
+  senderAddress: AddressDetails;
+  recipientAddress: AddressDetails;
+};
+
+export type ParcelDeliveryStatChartItem = {
+  deliveredParcelsCount: number;
+  period: string;
+  rawDate: string;
+  totalIncome: number;
+};
+
 export type ParcelDeliveryResponse = Paginated<ParcelDelivery>;
 
 export type ParcelDeliveryDetailsResponse = {
-  details: ParcelDelivery;
+  details: ParcelDeliveryDetails;
   history: { createdAt: string; status: PARCEL_STATUS }[];
 };
 
 export type ParcelDeliveriesStatsResponse = {
-  totalParcelsCount: number;
-  unresolvedParcelsCount: number;
-  deliveredParcelsCount: number;
+  totalStats: {
+    totalParcelsCount: number;
+    unresolvedParcelsCount: number;
+    deliveredParcelsCount: number;
+  };
+  chartData: {
+    hasData: boolean;
+    items: ParcelDeliveryStatChartItem[];
+  };
 };

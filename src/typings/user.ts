@@ -12,4 +12,11 @@ export type Courier = {
   assignedParcels: any;
 };
 
+export type CreateCourierPayload = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: "COURIER";
+};
+
 export type CouriersResponse = Paginated<Courier>;

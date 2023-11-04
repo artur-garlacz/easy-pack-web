@@ -3,7 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { WidgetBorderBox } from "@/components/atoms/WidgetBorderBox/WidgetBorderBox";
 import { StyledTable } from "@/components/organisms/StyledTable/StyledTable";
-import { Flex, Box, Spinner, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Spinner,
+  Text,
+  useDisclosure,
+  Button,
+} from "@chakra-ui/react";
 import { calculateDateDifference, dateFormats } from "@/lib/date";
 import { CircleWarnIcon } from "@/components/atoms/Icons/CircleWarn";
 import { AdvancedPagination } from "@/components/molecules/AdvancedPagination/AdvancedPagination";
@@ -16,32 +23,17 @@ import { PackageItemWithTooltip } from "@/components/organisms/PackageItemWithTo
 import { EpCircle } from "@/components/atoms/EpCircle/EpCircle";
 import { DropdownFilter } from "@/components/molecules/DropdownFilter/DropdownFilter";
 import { capitalize } from "@/lib/capitalizeString";
-import { useAuthenticatedSession } from "@/hooks/useAuthenticatedSession";
-
-export const PARCEL_STATUS_FILTER = {
-  ALL: null,
-  ...PARCEL_STATUS,
-} as const;
-
-const initialFilters = {
-  status: null,
-  assignedTo: null,
-};
+import {
+  ModalState,
+  PARCEL_STATUS_FILTER,
+  useParcelDeliveryTable,
+} from "@/components/organisms/ParcelDelivery/ParcelDeliveryTable.hook";
+import { AssignUserToParcelModal } from "@/components/organisms/ParcelDelivery/AssignUserToParcelModal/AssignUserToParcelModal";
 
 export function ParcelDeliveryTable() {
   const api = parcelRepository({});
-  const { user } = useAuthenticatedSession();
-  const [selectedParcelId, setSelectedParcelId] = useState<string | null>(null);
-  const [selectedParcel, setSelectedParcel] = useState<{
-    parcel: ParcelDelivery;
-    newStatus: PARCEL_STATUS;
-  } | null>(null);
-  const {
-    isOpen: isOpenDrawer,
-    onOpen: onOpenDrawer,
-    onClose: onCloseDrawer,
-  } = useDisclosure();
-  const [filters, setFilters] = useState(initialFilters);
+  const { modalState, onModalChange, onModalClose, filters, onChangeFilter } =
+    useParcelDeliveryTable();
   const [page, setPage] = useState<number>(1);
   const {
     status,
@@ -53,15 +45,6 @@ export function ParcelDeliveryTable() {
       filters,
     })
   );
-
-  // const PARCEL_USER_FILTER = {
-  //   ALL: null,
-  //   ME: user?.,
-  // };
-
-  const onChangeFilter = (name: string, value: string | null) => {
-    setFilters({ ...filters, [name]: value });
-  };
 
   const columns: ColumnDef<ParcelDelivery>[] = [
     {
@@ -80,9 +63,12 @@ export function ParcelDeliveryTable() {
             <ParcelStatusBadgeWithTooltip
               status={row.getValue("status")}
               onChange={(newStatus) => {
-                setSelectedParcel({
-                  parcel: row.original,
-                  newStatus,
+                onModalChange({
+                  data: row.original,
+                  type: "UPDATE_STATUS_MODAL",
+                  payload: {
+                    newStatus,
+                  },
                 });
               }}
             />
@@ -111,7 +97,7 @@ export function ParcelDeliveryTable() {
           new Date()
         );
         const isOverdue =
-          numberOfDaysFromCreation &&
+          numberOfDaysFromCreation > 2 &&
           row.original["status"] === PARCEL_STATUS.CREATED;
 
         return (
@@ -127,19 +113,38 @@ export function ParcelDeliveryTable() {
       header: "Description",
     },
     {
-      accessorKey: "type",
-      header: "Type",
+      accessorKey: "price",
+      header: "Price",
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue("type")}</div>;
+        return (
+          <div className="flex space-x-2">
+            {Number(row.getValue("price")).toFixed(2)} PLN
+          </div>
+        );
       },
     },
     {
       accessorKey: "user",
       header: "Assigned to",
       cell: ({ row }) => {
-        const user = row.original["user"];
+        const { user } = row.original;
+
         if (!user) {
-          return <div className="flex space-x-2">-</div>;
+          return (
+            <>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onModalChange({
+                    data: row.original,
+                    type: "ASSIGN_USER_MODAL",
+                  });
+                }}
+              >
+                Assign
+              </Button>
+            </>
+          );
         }
         return (
           <EpCircle bg="gray.300" width={10}>
@@ -153,7 +158,15 @@ export function ParcelDeliveryTable() {
   ];
 
   return (
-    <Flex alignItems="center" w="full" h="full">
+    <Flex
+      flexDirection="column"
+      justifyContent="center"
+      w="full"
+      h="auto"
+      gap={8}
+    >
+      <WidgetBorderBox bg="white" height={100} />
+
       <WidgetBorderBox
         w="full"
         bg="white"
@@ -180,7 +193,6 @@ export function ParcelDeliveryTable() {
         {status === "success" && (
           <>
             <StyledTable
-              staticRowsCount={10}
               columns={columns}
               data={data.data}
               paginationElement={
@@ -195,35 +207,68 @@ export function ParcelDeliveryTable() {
               headerProps={{
                 borderTop: "none",
               }}
-              onOpen={onOpenDrawer}
-              setSelectedId={setSelectedParcelId}
+              setSelectedElement={(data) =>
+                onModalChange({
+                  data,
+                  type: "DRAWER",
+                })
+              }
             />
-            {selectedParcelId && (
-              <ParcelDeliveryDetailsDrawer
-                isOpen={isOpenDrawer}
-                onClose={onCloseDrawer}
-                parcelId={selectedParcelId}
-                status={
-                  data.data.find((d) => d.id === selectedParcelId)?.status
-                }
-                trackingNumber={
-                  data.data.find((d) => d.id === selectedParcelId)
-                    ?.trackingNumber
-                }
-                refetchList={refetchList}
-              />
-            )}
-            {selectedParcel && (
-              <UpdateParcelDeliveryStatusModal
-                parcelData={selectedParcel.parcel}
-                newStatus={selectedParcel.newStatus}
-                isOpen={!!selectedParcel}
-                onClose={() => setSelectedParcel(null)}
-              />
-            )}
+            <ModalSelector
+              modalState={modalState}
+              onModalClose={onModalClose}
+              refetchList={refetchList}
+            />
           </>
         )}
       </WidgetBorderBox>
     </Flex>
   );
 }
+
+const ModalSelector = ({
+  modalState,
+  onModalClose,
+  refetchList,
+}: {
+  modalState: ModalState;
+  onModalClose: () => void;
+  refetchList: () => void;
+}) => {
+  if (!modalState) return null;
+
+  switch (modalState.type) {
+    case "DRAWER":
+      return (
+        <ParcelDeliveryDetailsDrawer
+          isOpen
+          onClose={onModalClose}
+          parcelId={modalState.data.id}
+          status={modalState.data.status}
+          trackingNumber={modalState.data.trackingNumber}
+          refetchList={refetchList}
+        />
+      );
+    case "UPDATE_STATUS_MODAL":
+      return (
+        <UpdateParcelDeliveryStatusModal
+          isOpen
+          newStatus={modalState.payload?.newStatus!}
+          parcelData={modalState.data}
+          onClose={onModalClose}
+          onSuccess={refetchList}
+        />
+      );
+    case "ASSIGN_USER_MODAL":
+      return (
+        <AssignUserToParcelModal
+          isOpen
+          parcel={modalState.data}
+          onClose={onModalClose}
+          onSuccess={refetchList}
+        />
+      );
+    default:
+      return null;
+  }
+};

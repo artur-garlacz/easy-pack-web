@@ -25,7 +25,7 @@ export function DropdownFilter<T>({
   const currItem = items.find((i) => i.value === currValue);
 
   return (
-    <Flex gap={2} overflow={"auto"} py={4} px={2}>
+    <Flex gap={2} overflow={"auto"} px={2}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

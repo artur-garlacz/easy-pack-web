@@ -1,4 +1,4 @@
-import ShipmentForm from "@/components/molecules/ShipmentForm";
+import ShipmentForm from "@/components/molecules/ShipmentForm/ShipmentForm";
 import { SimpleGrid } from "@chakra-ui/react";
 
 export function ShipmentSection() {

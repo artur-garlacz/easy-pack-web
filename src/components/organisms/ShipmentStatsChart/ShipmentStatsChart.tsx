@@ -11,10 +11,21 @@ import {
 } from "recharts";
 import {
   Card,
-  CardDescription,
+  CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/atoms/Card";
+  Flex,
+  Text,
+  useToken,
+} from "@chakra-ui/react";
+import { CardDescription, CardTitle } from "@/components/atoms/Card";
+import { WidgetBorderBox } from "@/components/atoms/WidgetBorderBox/WidgetBorderBox";
+import { useEffect, useRef, useState } from "react";
+// import {
+//   Card,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/atoms/Card";
 
 const data = [
   {
@@ -61,48 +72,55 @@ const data = [
   },
 ];
 
-export default function ShipmentStatsChart() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Statistic</CardTitle>
-        <CardDescription>Shipment statistic</CardDescription>
-      </CardHeader>
-      <div style={{ height: 350 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            width={500}
-            height={400}
-            data={data}
-            margin={{
-              top: 20,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey="name" strokeOpacity={0} />
-            <Tooltip />
-            <Bar
-              barSize={18}
-              yAxisId="left"
-              dataKey="pv"
-              fill="#695ce8"
-              radius={40}
-            />
-            <Bar
-              barSize={18}
-              yAxisId="right"
-              dataKey="uv"
-              fill="#c9079d"
-              radius={40}
-            />
+export default function ShipmentStatsChart({ isEmpty }: { isEmpty: boolean }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [chartWidth, setChartWidth] = useState(0);
+  const [currentHoverItem, setCurrentHoverItem] = useState<number | null>(null);
 
-            <Legend margin={{ top: 40 }} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </Card>
+  useEffect(() => {
+    if (ref.current) {
+      setChartWidth(ref.current.getBoundingClientRect().width);
+    }
+  }, []);
+
+  return (
+    <Flex flexBasis={"100%"} width={"100%"} height={350} ref={ref} gap={4}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          width={200}
+          height={400}
+          data={data}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid stroke="#f5f5f5" />
+          <XAxis dataKey="name" strokeOpacity={0} />
+          <Tooltip />
+
+          {isEmpty && (
+            <svg
+              x={chartWidth / 2 - 42}
+              y={82}
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g>
+                <rect rx="2" width="84" height="27" fill="#EDF2F7"></rect>
+                <text fontSize={16} y={18} x={12} fontWeight={500}>
+                  No Data
+                </text>
+              </g>
+            </svg>
+          )}
+
+          <Bar barSize={40} yAxisId="left" dataKey="pv" fill="#695ce8" />
+
+          <Legend margin={{ top: 40 }} />
+        </BarChart>
+      </ResponsiveContainer>
+    </Flex>
   );
 }

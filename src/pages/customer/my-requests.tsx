@@ -1,5 +1,5 @@
 import TitleNavbar from "@/components/atoms/TitleNavbar";
-import Header from "@/components/molecules/Header";
+import Header from "@/components/molecules/Header/Header";
 import { CustomerRequestsTable } from "@/components/organisms/CustomerRequestsTable/CustomerRequestsTable";
 
 export default function MyRequests() {

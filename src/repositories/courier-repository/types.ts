@@ -1,4 +1,4 @@
-import { CouriersResponse } from "@/typings/user";
+import { CouriersResponse, CreateCourierPayload } from "@/typings/user";
 
 export interface CourierRepository {
   getCouriers: ({
@@ -9,4 +9,5 @@ export interface CourierRepository {
     page: number;
     limit?: number;
   }) => Promise<CouriersResponse>;
+  createCourier: (data: CreateCourierPayload) => Promise<void>;
 }

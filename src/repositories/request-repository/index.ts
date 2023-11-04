@@ -17,6 +17,14 @@ export const requestRepository = ({
         headers,
       });
     },
+    createRequest(request) {
+      return fetcher({
+        method: "POST",
+        route: `api/customers/delivery-requests`,
+        headers,
+        payload: request,
+      });
+    },
     getEstimation({ type, pickUpAddress, shipmentUpAddress, packagesCount }) {
       return fetcher({
         method: "GET",

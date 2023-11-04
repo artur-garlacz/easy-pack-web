@@ -18,9 +18,7 @@ import { ParcelDeliveryDetailsResponse } from "@/typings/parcel";
 import { dateFormats } from "@/lib/date";
 import { ParcelStatusBadgeWithTooltip } from "@/components/molecules/ParcelStatusBadgeWithTooltip/ParcelStatusBadgeWithTooltip";
 
-const tabCategories = ["Details", "Status history"];
-
-const categories: string[] = ["details"];
+const tabCategories = ["Details", "Status history", "Packages"];
 
 export const ParcelDeliveryDetailsPanel = ({
   data,
@@ -32,8 +30,6 @@ export const ParcelDeliveryDetailsPanel = ({
   refetchList: () => void;
 }) => {
   const [, setTabIndex] = useState(0);
-
-  // const capitalize = capitalizeCamelCase([]);
 
   return (
     <Tabs onChange={(index) => setTabIndex(index)} colorScheme="black">
@@ -56,7 +52,7 @@ export const ParcelDeliveryDetailsPanel = ({
       </TabList>
       {data ? (
         <TabPanels>
-          <TabPanel key={categories[0]} px={0} mx={10} mt={4}>
+          <TabPanel key={"details"} px={0} mx={10} mt={4}>
             <SimpleGrid
               gridTemplateColumns={"115px auto"}
               columnGap={4}
@@ -81,38 +77,38 @@ export const ParcelDeliveryDetailsPanel = ({
                 />
               </Flex>
               <GridDivider />
-              <TextCaption>Sender info</TextCaption>
-              <Text>
-                {data.details.senderDetails.firstName}{" "}
-                {data.details.senderDetails.lastName}
-              </Text>
+              <TextCaption>Description</TextCaption>
+              <Text>{data.details.description || "-"}</Text>
+              <GridDivider />
+              <TextCaption>Price</TextCaption>
+              <Text>{data.details.price} PLN</Text>
+              <GridDivider />
+              <TextCaption>Pickup at</TextCaption>
+              <Text>{dateFormats.common(data.details.pickupAt)}</Text>
+              <GridDivider />
+              <TextCaption>Shipment at</TextCaption>
+              <Text>{dateFormats.common(data.details.shipmentAt)}</Text>
               <GridDivider />
               <TextCaption>Sender address</TextCaption>
               <Text>
-                {data.details.senderDetails.locationNumber}{" "}
-                {data.details.senderDetails.street}
+                {data.details.senderAddress.locationNumber}{" "}
+                {data.details.senderAddress.street}
                 <br />
-                {data.details.senderDetails.city}{" "}
-                {data.details.senderDetails.postalCode}
-              </Text>
-              <GridDivider />
-              <TextCaption>Recipant info</TextCaption>
-              <Text>
-                {data.details.recipientDetails.firstName}{" "}
-                {data.details.recipientDetails.lastName}
+                {data.details.senderAddress.city}{" "}
+                {data.details.senderAddress.postalCode}
               </Text>
               <GridDivider />
               <TextCaption>Recipant address</TextCaption>
               <Text>
-                {data.details.recipientDetails.locationNumber}
-                {data.details.recipientDetails.street}
+                {data.details.recipientAddress.locationNumber}{" "}
+                {data.details.recipientAddress.street}
                 <br />
-                {data.details.recipientDetails.city}{" "}
-                {data.details.recipientDetails.postalCode}
+                {data.details.recipientAddress.city}{" "}
+                {data.details.recipientAddress.postalCode}
               </Text>
             </SimpleGrid>
           </TabPanel>
-          <TabPanel key={categories[1]} px={0} mx={10} mt={4}>
+          <TabPanel key={"history"} px={0} mx={10} mt={4}>
             {data.history.map((record, index) => {
               return (
                 <Box key={index}>
@@ -135,6 +131,7 @@ export const ParcelDeliveryDetailsPanel = ({
               );
             })}
           </TabPanel>
+          <TabPanel key={"packages"} px={0} mx={10} mt={4}></TabPanel>
         </TabPanels>
       ) : (
         <Text mt={10} textAlign={"center"}>

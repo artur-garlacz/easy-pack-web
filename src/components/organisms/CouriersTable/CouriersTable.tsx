@@ -2,22 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { WidgetBorderBox } from "@/components/atoms/WidgetBorderBox/WidgetBorderBox";
 import { StyledTable } from "@/components/organisms/StyledTable/StyledTable";
-import { Flex, Box, Spinner, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Spinner,
+  Text,
+  useDisclosure,
+  Button,
+} from "@chakra-ui/react";
 import { AdvancedPagination } from "@/components/molecules/AdvancedPagination/AdvancedPagination";
 import { ColumnDef } from "@tanstack/react-table";
 import { courierRepository } from "@/repositories/courier-repository";
 import { Courier } from "@/typings/user";
+import { CreateCourierModal } from "@/components/organisms/CreateCourierModal/CreateCourierModal";
 
 export function CouriersTable() {
   const api = courierRepository({});
-  const [selectedCourierId, setSelectedCourierId] = useState<string | null>(
-    null
-  );
-  const {
-    isOpen: isOpenDrawer,
-    onOpen: onOpenDrawer,
-    onClose: onCloseDrawer,
-  } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [page, setPage] = useState<number>(1);
   const {
     status,
@@ -29,32 +30,37 @@ export function CouriersTable() {
       filters: {},
     })
   );
-
   const columns: ColumnDef<Courier>[] = [
     {
-      accessorKey: "name",
+      accessorKey: "fullName",
       header: "Full name",
     },
     {
       accessorKey: "email",
       header: "Email",
     },
-    {
-      accessorKey: "assignedParcels",
-      header: "Assigned parcels",
-      cell: ({ row }) => {
-        return (
-          <Flex alignItems="center" gap={1}>
-            s
-          </Flex>
-        );
-      },
-    },
   ];
 
   return (
-    <Flex alignItems="center" w="full" h="full">
-      <WidgetBorderBox w="full" bg="white" title="Couriers">
+    <Flex
+      flexDirection="column"
+      justifyContent="center"
+      w="full"
+      h="auto"
+      gap={8}
+    >
+      <WidgetBorderBox bg="white" height={100} />
+
+      <WidgetBorderBox
+        w="full"
+        bg="white"
+        title="Couriers"
+        headerButtons={
+          <Button ml={4} onClick={onOpen}>
+            Add new
+          </Button>
+        }
+      >
         {status === "error" && (
           <Text>An error occurred while loading couriers.</Text>
         )}
@@ -66,7 +72,6 @@ export function CouriersTable() {
         {status === "success" && (
           <>
             <StyledTable
-              staticRowsCount={10}
               columns={columns}
               data={data.data}
               paginationElement={
@@ -81,32 +86,12 @@ export function CouriersTable() {
               headerProps={{
                 borderTop: "none",
               }}
-              onOpen={onOpenDrawer}
-              setSelectedId={setSelectedCourierId}
             />
-            {/* {selectedCourierId && (
-              <ParcelDeliveryDetailsDrawer
-                isOpen={isOpenDrawer}
-                onClose={onCloseDrawer}
-                parcelId={selectedCourierId}
-                status={
-                  data.data.find((d) => d.id === selectedParcelId)?.status
-                }
-                trackingNumber={
-                  data.data.find((d) => d.id === selectedParcelId)
-                    ?.trackingNumber
-                }
-                refetchList={refetchList}
-              />
-            )}
-            {selectedParcel && (
-              <UpdateParcelDeliveryStatusModal
-                parcelData={selectedParcel.parcel}
-                newStatus={selectedParcel.newStatus}
-                isOpen={!!selectedParcel}
-                onClose={() => setSelectedParcel(null)}
-              />
-            )} */}
+            <CreateCourierModal
+              isOpen={isOpen}
+              onClose={onClose}
+              onSuccess={refetchList}
+            />
           </>
         )}
       </WidgetBorderBox>

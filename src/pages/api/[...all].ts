@@ -23,7 +23,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     target: process.env.BACKEND_URL,
     headers: {
       "Content-Type": "application/json",
-      // authorization: session?.user.data.id || "",
+      Authorization: session?.user.accessToken
+        ? `Bearer ${session?.user.accessToken}`
+        : "",
     },
   });
 

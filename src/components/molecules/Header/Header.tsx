@@ -10,11 +10,12 @@ import {
 import { useAuthenticatedSession } from "@/hooks/useAuthenticatedSession";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { UserType } from "@/typings/user";
 
 export default function Header() {
-  const { data, isAuthenticated } = useAuthenticatedSession();
+  const { user, isAuthenticated } = useAuthenticatedSession();
   return (
-    <header className="w-full sticky top-0 bg-slate-50 body-font border-b">
+    <header className="w-full sticky top-0 z-50 bg-slate-50 body-font border-b">
       <div className="container h-16 flex text-black flex-col items-start justify-between mx-auto md:flex-row md:items-center rounded-3xl">
         <a className="flex items-center mb-4 text-xl font-semibold text-black title-font md:mb-0">
           EasyPack
@@ -30,7 +31,7 @@ export default function Header() {
             Request parcel
           </Link>
         </nav>
-        {isAuthenticated ? (
+        {isAuthenticated && user?.type === UserType.CUSTOMER ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
@@ -39,7 +40,7 @@ export default function Header() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="center">
-              <DropdownMenuLabel>{data?.email}</DropdownMenuLabel>
+              <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuItem>
@@ -59,7 +60,8 @@ export default function Header() {
               Sign in
             </Link>
             <Link
-              className="bg-black py-2 px-3 rounded-3xl text-white"
+              style={{ backgroundColor: "rgba(168, 196, 154,1)" }}
+              className=" py-2 px-3 rounded-3xl text-white"
               href="/customer/auth/signup"
             >
               Sign up
