@@ -29,9 +29,12 @@ import {
   useParcelDeliveryTable,
 } from "@/components/organisms/ParcelDelivery/ParcelDeliveryTable.hook";
 import { AssignUserToParcelModal } from "@/components/organisms/ParcelDelivery/AssignUserToParcelModal/AssignUserToParcelModal";
+import { useAuthenticatedSession } from "@/hooks/useAuthenticatedSession";
+import { Input } from "@/components/atoms/Input";
 
 export function ParcelDeliveryTable() {
-  const api = parcelRepository({});
+  const { token } = useAuthenticatedSession();
+  const api = parcelRepository({ token });
   const { modalState, onModalChange, onModalClose, filters, onChangeFilter } =
     useParcelDeliveryTable();
   const [page, setPage] = useState<number>(1);
@@ -109,8 +112,33 @@ export function ParcelDeliveryTable() {
       },
     },
     {
+      accessorKey: "pickupAt",
+      header: "Pickup at",
+      cell: ({ row }) => {
+        return (
+          <Flex alignItems="center" gap={1}>
+            {dateFormats.common(row.getValue("pickupAt"))}
+          </Flex>
+        );
+      },
+    },
+    {
+      accessorKey: "shipmentAt",
+      header: "Shimpent at",
+      cell: ({ row }) => {
+        return (
+          <Flex alignItems="center" gap={1}>
+            {dateFormats.common(row.getValue("shipmentAt"))}
+          </Flex>
+        );
+      },
+    },
+    {
       accessorKey: "description",
       header: "Description",
+      cell: ({ row }) => {
+        return row.getValue("description") || "-";
+      },
     },
     {
       accessorKey: "price",
@@ -172,14 +200,19 @@ export function ParcelDeliveryTable() {
         bg="white"
         title="Parcel deliveries"
         headerButtons={
-          <DropdownFilter
-            items={Object.entries(PARCEL_STATUS_FILTER).map(([key, value]) => ({
-              label: capitalize(key),
-              value,
-            }))}
-            value={filters.status}
-            onSelect={(val) => onChangeFilter("status", val)}
-          />
+          <Flex>
+            <DropdownFilter
+              items={Object.entries(PARCEL_STATUS_FILTER).map(
+                ([key, value]) => ({
+                  label: capitalize(key),
+                  value,
+                })
+              )}
+              value={filters.status}
+              onSelect={(val) => onChangeFilter("status", val)}
+            />
+            <Input placeholder="Tracking number" />
+          </Flex>
         }
       >
         {status === "error" && (
@@ -243,7 +276,6 @@ const ModalSelector = ({
         <ParcelDeliveryDetailsDrawer
           isOpen
           onClose={onModalClose}
-          parcelId={modalState.data.id}
           status={modalState.data.status}
           trackingNumber={modalState.data.trackingNumber}
           refetchList={refetchList}

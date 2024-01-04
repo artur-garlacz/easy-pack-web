@@ -2,8 +2,9 @@ import { RequestsTable } from "@/components/organisms/RequestsTable/RequestsTabl
 import { useAuthenticatedSession } from "@/hooks/useAuthenticatedSession";
 import { requestRepository } from "@/repositories/request-repository";
 
-export function CustomerRequestsTable() {
+export function CustomerParcelDeliveryTable() {
   const { token } = useAuthenticatedSession();
   const api = requestRepository({ token });
-  return <RequestsTable fetchFn={api.getAllRequests} />;
+
+  return <></>;
 }

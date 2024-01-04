@@ -81,11 +81,13 @@ const theme = {
   },
   colors: {
     brand: {
-      dark: "#EF4123",
-      600: "#EF4123", // to work with chakra Button colorScheme and hover state
-      medium: "#F37021",
-      500: "#F37021",
-      light: "#F7941D",
+      100: "rgba(168, 196, 154, 0.1)",
+      200: "rgba(168, 196, 154, 0.2)",
+      300: "rgba(168, 196, 154, 0.3)",
+      400: "rgba(168, 196, 154, 0.4)",
+      500: "rgba(168, 196, 154, 0.5)",
+      600: "rgba(168, 196, 154, 0.6)",
+      main: "rgba(168, 196, 154, 1)",
     },
     neutrals: {
       grey: {

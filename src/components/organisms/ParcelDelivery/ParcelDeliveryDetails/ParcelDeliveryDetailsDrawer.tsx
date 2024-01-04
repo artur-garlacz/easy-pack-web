@@ -7,16 +7,14 @@ import { parcelRepository } from "@/repositories/parcel-repository";
 import { ParcelDeliveryDetailsPanel } from "@/components/organisms/ParcelDelivery/ParcelDeliveryDetails/ParcelDeliveryDetailsPanel";
 
 type ParcelDeliveryDetailsDrawerProp = {
-  parcelId: string;
   isOpen: boolean;
   onClose: () => void;
   refetchList: () => void;
-  trackingNumber?: string;
+  trackingNumber: string;
   status?: PARCEL_STATUS;
 };
 
 export const ParcelDeliveryDetailsDrawer = ({
-  parcelId,
   isOpen,
   onClose,
   status,
@@ -30,7 +28,7 @@ export const ParcelDeliveryDetailsDrawer = ({
       header={<DrawerHeader trackingNumber={trackingNumber} status={status} />}
       drawerBody={
         <ParcelDeliveryDetailsDrawerBody
-          parcelId={parcelId}
+          trackingNumber={trackingNumber}
           refetchList={refetchList}
         />
       }
@@ -64,12 +62,12 @@ const DrawerHeader = ({
 };
 
 type MedicationDrawerBodyProps = {
-  parcelId: string;
+  trackingNumber: string;
   refetchList: () => void;
 };
 
 const ParcelDeliveryDetailsDrawerBody = ({
-  parcelId,
+  trackingNumber,
   refetchList,
 }: MedicationDrawerBodyProps) => {
   const backend = parcelRepository({});
@@ -80,9 +78,9 @@ const ParcelDeliveryDetailsDrawerBody = ({
     isLoading,
     refetch: refetchDetails,
   } = useQuery(
-    [backend.getParcelDeliveryDetails.name, { parcelId }],
+    [backend.getParcelDeliveryDetails.name, { trackingNumber }],
     () => {
-      return backend.getParcelDeliveryDetails({ parcelId });
+      return backend.getParcelDeliveryDetails({ trackingNumber });
     },
     { retry: 1 }
   );

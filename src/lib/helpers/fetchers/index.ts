@@ -23,7 +23,7 @@ export const fetchMethod: Fetch = ({ baseUrl }: { baseUrl: string }) => {
   return async ({ queryString, route, ...rest }) => {
     const serializedQueryString = parseUrlParams(queryString);
     const queryURL = `${baseUrl}${route}${serializedQueryString}`;
-
+    // const queryURL = `http://localhost:8000/${route}${serializedQueryString}`;
     const response = await fetchData({ queryURL, ...rest });
     const transformedResponse = await getTransformedResponse({
       response,

@@ -20,7 +20,7 @@ export const requestRepository = ({
     createRequest(request) {
       return fetcher({
         method: "POST",
-        route: `api/customers/delivery-requests`,
+        route: `api/parcel-deliveries`,
         headers,
         payload: request,
       });

@@ -1,17 +1,10 @@
 import { WidgetBorderBox } from "@/components/atoms/WidgetBorderBox/WidgetBorderBox";
-import ShipmentStatsChart from "@/components/organisms/ShipmentStatsChart/ShipmentStatsChart";
 import { ParcelCountChart } from "@/components/organisms/ShipmentStatsWidget/ParcelCountChart";
 import { TotalParcelsIncomeChart } from "@/components/organisms/ShipmentStatsWidget/TotalParcelIncomeChart";
-import { PARCEL_DELIVERY_COLOR_MAP } from "@/lib/constants";
-import { parcelRepository } from "@/repositories/parcel-repository";
 import { ParcelDeliveriesStatsResponse } from "@/typings/parcel";
 import {
-  Badge,
-  Box,
-  Button,
   Checkbox,
   Flex,
-  Spinner,
   Tab,
   TabList,
   TabPanel,
@@ -20,13 +13,11 @@ import {
   Text,
   ThemeTypings,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
 
 export const ShipmentStatsWidget = ({
   chartData,
 }: {
-  chartData: ParcelDeliveriesStatsResponse["chartData"];
+  chartData: ParcelDeliveriesStatsResponse["parcelsChartData"];
 }) => {
   const data = Array.from(chartData.items).reverse();
 

@@ -11,6 +11,7 @@ import { useAuthenticatedSession } from "@/hooks/useAuthenticatedSession";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { UserType } from "@/typings/user";
+import { Button } from "@/components/atoms/Button";
 
 export default function Header() {
   const { user, isAuthenticated } = useAuthenticatedSession();

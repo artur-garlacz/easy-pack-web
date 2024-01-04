@@ -17,18 +17,20 @@ export const WidgetBorderBox = (
       p={8}
       {...boxProps}
     >
-      <Flex
-        justifyContent={"flex-start"}
-        alignItems={"center"}
-        mb={flexMarginBottom || 6}
-      >
-        {title && (
-          <Text fontSize={"2xl"} fontWeight={700}>
-            {title}
-          </Text>
-        )}
-        {headerButtons}
-      </Flex>
+      {(headerButtons || title) && (
+        <Flex
+          justifyContent={"flex-start"}
+          alignItems={"center"}
+          mb={flexMarginBottom || 6}
+        >
+          {title && (
+            <Text fontSize={"2xl"} fontWeight={700}>
+              {title}
+            </Text>
+          )}
+          {headerButtons}
+        </Flex>
+      )}
       {children}
     </Box>
   );

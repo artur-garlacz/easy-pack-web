@@ -20,8 +20,6 @@ export default function AddPackageSection() {
   const packages = watch("packages");
   const additionalPackages = packages.slice(1);
 
-  console.log(packages);
-
   const handleAddAdditionalPackage = () => {
     setValue("packages", [...packages, INITIAL_PACKAGE]);
   };

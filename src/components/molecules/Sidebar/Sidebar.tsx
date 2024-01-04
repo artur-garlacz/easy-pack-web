@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/atoms/Avatar";
 import { useAuthenticatedSession } from "@/hooks/useAuthenticatedSession";
 import { cn } from "@/lib/utils";
 import { Badge, Button, Flex, Text } from "@chakra-ui/react";
-import { LayoutDashboard, Mailbox } from "lucide-react";
+import { LayoutDashboard, Mailbox, Truck } from "lucide-react";
 import { Package } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -78,6 +78,15 @@ export function Sidebar({ className }: SidebarProps) {
             >
               <Mailbox size={20} className="mr-2 text-gray-700" />
               Couriers
+            </Button>
+            <Button
+              w="100%"
+              justifyContent="start"
+              onClick={() => router.push("/delivery/fleet")}
+              variant={isActive("/delivery/fleet")}
+            >
+              <Truck size={20} className="mr-2 text-gray-700" />
+              Fleet
             </Button>
           </div>
         </div>

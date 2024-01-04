@@ -8,16 +8,17 @@ export enum PACKAGE_TYPE {
 
 const packageItem = z.object({
   type: z.nativeEnum(PACKAGE_TYPE),
-  weight: z.number().min(1),
-  length: z.number().min(1),
-  width: z.number().min(1),
-  height: z.number().min(1),
+  weight: z.coerce.number().nonnegative(),
+  length: z.coerce.number().nonnegative(),
+  width: z.coerce.number().nonnegative(),
+  height: z.coerce.number().nonnegative(),
   description: z.string().optional(),
 });
 
 const address = z.object({
   street: z.string().min(1),
   city: z.string().min(1),
+  country: z.string().min(1),
   postalCode: z.string().min(1),
   locationNumber: z.string().min(1),
   phoneNumber: z.string().optional(),

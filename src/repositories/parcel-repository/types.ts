@@ -4,9 +4,9 @@ import {
   ParcelDeliveryDetailsResponse,
   ParcelDeliveryResponse,
 } from "@/typings/parcel";
+import { RequestFormSchema } from "@/typings/requests";
 
 export interface ParcelRepository {
-  getParcel: ({ parcelNumber }: { parcelNumber: string }) => Promise<any>;
   getParcelDeliveries: ({
     page,
     limit,
@@ -18,9 +18,9 @@ export interface ParcelRepository {
   }) => Promise<ParcelDeliveryResponse>;
   getParcelDeliveriesStats: () => Promise<ParcelDeliveriesStatsResponse>;
   getParcelDeliveryDetails: ({
-    parcelId,
+    trackingNumber,
   }: {
-    parcelId: string;
+    trackingNumber: string;
   }) => Promise<ParcelDeliveryDetailsResponse>;
   updateParcelStatus: ({
     parcelId,
@@ -36,4 +36,6 @@ export interface ParcelRepository {
     parcelId: string;
     userId: string;
   }) => Promise<void>;
+  createParcelDelivery: (requst: RequestFormSchema) => Promise<void>;
+  // createEstimation: (requst: RequestFormSchema) => Promise<void>;
 }

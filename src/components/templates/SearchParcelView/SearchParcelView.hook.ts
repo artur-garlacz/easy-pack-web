@@ -2,31 +2,31 @@ import { getQueryStringValue, setQueryStringValue } from "@/lib/query-string";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export function useSearchParcelView() {
-  const queryStringKey = "parcelNumber";
-  const parcelNumberValue = getQueryStringValue(queryStringKey);
-  const [parcelNumber, setParcelNumber] = useState<string>(
-    parcelNumberValue || ""
+  const queryStringKey = "trackingNumber";
+  const trackingNumberValue = getQueryStringValue(queryStringKey);
+  const [trackingNumber, setTrackingNumber] = useState<string>(
+    trackingNumberValue || ""
   );
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
-    if (parcelNumber) {
+    if (trackingNumber) {
       setSubmitted(true);
     }
-  }, []);
+  }, [trackingNumber]);
 
   const onChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
     setSubmitted(false);
-    setParcelNumber(value);
+    setTrackingNumber(value);
   };
 
   const onSubmit = () => {
     setSubmitted(true);
-    setQueryStringValue(queryStringKey, parcelNumber);
+    setQueryStringValue(queryStringKey, trackingNumber);
   };
 
   return {
-    parcelNumber,
+    trackingNumber,
     submitted,
     onChange,
     onSubmit,

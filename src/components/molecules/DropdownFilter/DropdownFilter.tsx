@@ -25,13 +25,13 @@ export function DropdownFilter<T>({
   const currItem = items.find((i) => i.value === currValue);
 
   return (
-    <Flex gap={2} overflow={"auto"} px={2}>
+    <Flex gap={2} px={2}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
             size="sm"
-            className="ml-auto hidden h-8 lg:flex"
+            className="ml-auto hidden h-auto lg:flex"
           >
             Status:
             <strong className="ml-1">{currItem?.label}</strong>

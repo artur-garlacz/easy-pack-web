@@ -1,9 +1,9 @@
-import { PackageItem } from "@/components/atoms/PackageItem/PackageItem";
+import { capitalize } from "@/lib/capitalizeString";
 import { Package } from "@/typings/requests";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
 export const PackageTooltipContent = ({
-  packageItem: { id, height, length, weight, width, description },
+  packageItem: { id, height, length, weight, width, description, type },
 }: {
   packageItem: Package;
 }) => {
@@ -32,7 +32,7 @@ export const PackageTooltipContent = ({
           <Text fontWeight="bold" mb={1}>
             Height
           </Text>
-          <Text>{height}</Text>
+          <Text>{height} cm</Text>
         </Flex>
         <Flex
           justifyContent="space-between"
@@ -44,19 +44,7 @@ export const PackageTooltipContent = ({
           <Text fontWeight="bold" mb={1}>
             Length
           </Text>
-          <Text>{length}</Text>
-        </Flex>
-        <Flex
-          justifyContent="space-between"
-          borderBottom="1px"
-          borderColor="gray.200"
-          pb={1}
-          width="full"
-        >
-          <Text fontWeight="bold" mb={1}>
-            Weight
-          </Text>
-          <Text>{weight}</Text>
+          <Text>{length} cm</Text>
         </Flex>
         <Flex
           justifyContent="space-between"
@@ -68,7 +56,31 @@ export const PackageTooltipContent = ({
           <Text fontWeight="bold" mb={1}>
             Width
           </Text>
-          <Text>{width}</Text>
+          <Text>{width} cm</Text>
+        </Flex>
+        <Flex
+          justifyContent="space-between"
+          borderBottom="1px"
+          borderColor="gray.200"
+          pb={1}
+          width="full"
+        >
+          <Text fontWeight="bold" mb={1}>
+            Weight
+          </Text>
+          <Text>{weight} kg</Text>
+        </Flex>
+        <Flex
+          justifyContent="space-between"
+          borderBottom="1px"
+          borderColor="gray.200"
+          pb={1}
+          width="full"
+        >
+          <Text fontWeight="bold" mb={1}>
+            Type
+          </Text>
+          <Text>{capitalize(type)}</Text>
         </Flex>
         {description && (
           <Flex

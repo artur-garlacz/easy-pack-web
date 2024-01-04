@@ -38,9 +38,9 @@ export default function PackageTypePicker({ index }: { index: number }) {
       {parcelTypes.map(({ type, Icon }) => (
         <Button
           variant="outline"
-          bg={currPackage?.type === type ? "rgba(168, 196, 154, 0.2)" : "white"}
+          bg={currPackage?.type === type ? "brand.200" : "white"}
           _hover={{
-            backgroundColor: "rgba(168, 196, 154, 0.4)",
+            backgroundColor: "brand.400",
           }}
           key={`${index}.${type}`}
           onClick={() => onSelect(type)}

@@ -19,25 +19,31 @@ import {
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { requestRepository } from "@/repositories/request-repository";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import TitleNavbar from "@/components/atoms/TitleNavbar";
 import Header from "@/components/molecules/Header/Header";
 import { useSuccessToast } from "@/hooks/useToast/useSuccessToast";
 import { useErrorToast } from "@/hooks/useToast/useErrorToast";
 import { RequestFormSchema, requestFormSchema } from "@/typings/requests";
+import { ParcelRequestSummarySection } from "@/components/molecules/ParcelRequestSummarySection/ParcelRequestSummarySection";
+import { parcelRepository } from "@/repositories/parcel-repository";
 
 export default function CreateParcelRequest() {
   const form = useForm<RequestFormSchema>({
     defaultValues: {
-      pickupAddress: {},
-      deliveryAddress: {},
+      pickupAddress: {
+        country: "PL",
+      },
+      deliveryAddress: {
+        country: "PL",
+      },
       packages: [INITIAL_PACKAGE],
     },
     resolver: zodResolver(requestFormSchema),
   });
   const showError = useErrorToast();
   const showSuccess = useSuccessToast();
-  const api = requestRepository({});
+  const api = parcelRepository({});
   // const {
   //   status,
   //   data,
@@ -51,7 +57,7 @@ export default function CreateParcelRequest() {
   //   })
   // );
   const { mutateAsync } = useMutation(
-    (payload: RequestFormSchema) => api.createRequest(payload),
+    (payload: RequestFormSchema) => api.createParcelDelivery(payload),
     {
       onSuccess: async () => {
         showSuccess({ message: "Request has been sent" });
@@ -65,10 +71,11 @@ export default function CreateParcelRequest() {
   const { handleSubmit, reset } = form;
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log("WW");
     await mutateAsync(data);
     reset();
   });
-
+  console.log(form);
   return (
     <>
       <Header />
@@ -88,45 +95,42 @@ export default function CreateParcelRequest() {
                 Fill form below to request parcel delivery
               </CardDescription>
             </CardHeader>
-            <form className="" onSubmit={onSubmit}>
+            <form onSubmit={onSubmit}>
               <Accordion defaultIndex={[0]} allowMultiple>
                 <AccordionItem borderTop="none">
-                  <h2>
-                    <AccordionButton>
-                      <Box as="span" flex="1" textAlign="left">
-                        1. Packages
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h2>
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      1. Packages
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
                   <AccordionPanel pb={4}>
                     <AddPackageSection />
                   </AccordionPanel>
                 </AccordionItem>
 
                 <AccordionItem>
-                  <h2>
-                    <AccordionButton>
-                      <Box as="span" flex="1" textAlign="left">
-                        2. Address data
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h2>
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      2. Address data
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
                   <AccordionPanel pb={4}>
                     <ShipmentSection />
                   </AccordionPanel>
                 </AccordionItem>
+
                 <AccordionItem>
-                  <h2>
-                    <AccordionButton>
-                      <Box as="span" flex="1" textAlign="left">
-                        3. Summary
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel pb={4}></AccordionPanel>
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      3. Summary
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    <ParcelRequestSummarySection />
+                  </AccordionPanel>
                 </AccordionItem>
               </Accordion>
             </form>

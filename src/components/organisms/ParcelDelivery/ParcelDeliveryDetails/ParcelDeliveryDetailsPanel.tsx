@@ -10,6 +10,9 @@ import {
   Badge,
   Divider,
   Box,
+  Card,
+  CardHeader,
+  CardBody,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { GridDivider } from "@/components/atoms/GridDivider/GridDivider";
@@ -17,6 +20,8 @@ import { TextCaption } from "@/components/atoms/TextCaption/TextCaption";
 import { ParcelDeliveryDetailsResponse } from "@/typings/parcel";
 import { dateFormats } from "@/lib/date";
 import { ParcelStatusBadgeWithTooltip } from "@/components/molecules/ParcelStatusBadgeWithTooltip/ParcelStatusBadgeWithTooltip";
+import { PackageItem } from "@/components/atoms/PackageItem/PackageItem";
+import { Package } from "@/typings/requests";
 
 const tabCategories = ["Details", "Status history", "Packages"];
 
@@ -131,7 +136,11 @@ export const ParcelDeliveryDetailsPanel = ({
               );
             })}
           </TabPanel>
-          <TabPanel key={"packages"} px={0} mx={10} mt={4}></TabPanel>
+          <TabPanel key={"packages"} px={0} mx={10} mt={4}>
+            {data.details.packages.map((item) => (
+              <PackageDetails key={item.id} data={item} />
+            ))}
+          </TabPanel>
         </TabPanels>
       ) : (
         <Text mt={10} textAlign={"center"}>
@@ -139,5 +148,39 @@ export const ParcelDeliveryDetailsPanel = ({
         </Text>
       )}
     </Tabs>
+  );
+};
+
+const PackageDetails = ({ data }: { data: Package }) => {
+  return (
+    <Card variant="filled">
+      <CardBody>
+        <Flex gap={2}>
+          <PackageItem />
+          <Flex flexDirection="column">
+            <Text fontWeight={600}>
+              #{data.id.substring(0, 6).toUpperCase()}
+            </Text>
+            <Text fontWeight={400}>{data.description || "-"}</Text>
+          </Flex>
+        </Flex>
+        <SimpleGrid templateColumns={"1fr 1fr"}>
+          <DataField
+            label="Dimensions"
+            value={`${data.height}x${data.length}x${data.width} cm`}
+          />
+          <DataField label="Weight" value={`${data.weight} kg`} />
+        </SimpleGrid>
+      </CardBody>
+    </Card>
+  );
+};
+
+const DataField = ({ label, value }: { label: string; value: string }) => {
+  return (
+    <Flex flexDirection="column">
+      <Text fontWeight={600}>{label}</Text>
+      <Text fontWeight={400}>{value}</Text>
+    </Flex>
   );
 };

@@ -1,6 +1,6 @@
 import TitleNavbar from "@/components/atoms/TitleNavbar";
 import Header from "@/components/molecules/Header/Header";
-import { CustomerRequestsTable } from "@/components/organisms/CustomerRequestsTable/CustomerRequestsTable";
+import { CustomerParcelDeliveryTable } from "@/components/organisms/CustomerParcelDeliveryTable/CustomerParcelDeliveryTable";
 
 export default function MyRequests() {
   return (
@@ -8,7 +8,7 @@ export default function MyRequests() {
       <Header />
       <TitleNavbar title="My requests" />
       <div className="container mx-auto px-4 pt-16">
-        <CustomerRequestsTable />
+        <CustomerParcelDeliveryTable />
       </div>
     </>
   );

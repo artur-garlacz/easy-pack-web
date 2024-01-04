@@ -30,7 +30,7 @@ export const PackageItemWithTooltip = ({
             onClick={(e) => {
               e.stopPropagation();
             }}
-            cursor={"initial"}
+            cursor={"pointer"}
           >
             <PackageItem numberOfMultiples={packages.length} />
           </Flex>

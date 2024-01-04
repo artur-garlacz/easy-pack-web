@@ -29,7 +29,7 @@ type Props = {
 
 export const CreateCourierModal = ({ isOpen, onClose, onSuccess }: Props) => {
   const { user } = useAuthenticatedSession();
-  const { register, handleSubmit } = useForm<any>({
+  const { register, handleSubmit, reset } = useForm<any>({
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -47,6 +47,7 @@ export const CreateCourierModal = ({ isOpen, onClose, onSuccess }: Props) => {
         toast({ title: "Courier created", colorScheme: "green" });
         onSuccess?.();
         onClose();
+        reset();
       },
       onError: () => {
         errorToast({

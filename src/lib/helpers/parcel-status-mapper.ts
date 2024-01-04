@@ -1,4 +1,4 @@
-import { PARCEL_STATUS } from "@/typings/parcel";
+import { PARCEL_EVENT_TYPE, PARCEL_STATUS } from "@/typings/parcel";
 import { LucideIcon, PackageCheck } from "lucide-react";
 import {
   // MapPin,
@@ -16,37 +16,31 @@ export const parcelStatusMapper: Record<
     Icon: LucideIcon;
   }
 > = {
-  // [PARCEL_STATUS.PARCEL_CREATED]: {
-  //   info: "Delivery route registered in system",
-  //   title: "Registered in system",
-  //   Icon: PackagePlus,
-  // },
-  [PARCEL_STATUS.CREATED]: {
+  [PARCEL_EVENT_TYPE.PARCEL_CREATED]: {
     info: "Delivery route registered in system",
     title: "Registered in system",
     Icon: PackagePlus,
   },
-  // [PARCEL_STATUS.COURIER_ASSIGNED_TO_PARCEL]: {
-  //   info: "Courier assigned to delivery",
-  //   title: "Courier assigned",
-  //   Icon: UserPlus2,
-  // },
-  [PARCEL_STATUS.PENDING]: {
+  [PARCEL_EVENT_TYPE.COURIER_ASSIGNED_TO_PARCEL]: {
+    info: "Courier assigned to delivery",
+    title: "Courier assigned",
+    Icon: UserPlus2,
+  },
+  [PARCEL_EVENT_TYPE.PENDING]: {
     info: "Parcel will be picked up from indicated place",
-    title: "Pending",
+    title: "In way for parcel",
     Icon: PackageSearch,
   },
-  [PARCEL_STATUS.IN_TRANSIT]: {
+  [PARCEL_EVENT_TYPE.IN_TRANSIT]: {
     info: "Parcel has been picked up and is on its way",
     title: "In way",
     Icon: Truck,
   },
-  [PARCEL_STATUS.DELIVERED]: {
-    info: "Parcel has been picked up and is on its way",
+  [PARCEL_EVENT_TYPE.DELIVERED]: {
+    info: "Parcel has been delivered",
     title: "Delivered",
     Icon: PackageCheck,
   },
-  // [ParcelStatus.PARCEL_ARCHIVED]: "Parcel archived",
 };
 
 export const allowedParcelStatusUpdates: Record<
@@ -56,7 +50,6 @@ export const allowedParcelStatusUpdates: Record<
   [PARCEL_STATUS.CREATED]: [PARCEL_STATUS.PENDING],
   [PARCEL_STATUS.PENDING]: [PARCEL_STATUS.CREATED, PARCEL_STATUS.IN_TRANSIT],
   [PARCEL_STATUS.IN_TRANSIT]: [PARCEL_STATUS.DELIVERED],
-  [PARCEL_STATUS.DELIVERED]: [PARCEL_STATUS.IN_TRANSIT, PARCEL_STATUS.ARCHIVED],
-  [PARCEL_STATUS.ARCHIVED]: [],
+  [PARCEL_STATUS.DELIVERED]: [PARCEL_STATUS.IN_TRANSIT],
   [PARCEL_STATUS.CANCELLED]: [PARCEL_STATUS.PENDING],
 };

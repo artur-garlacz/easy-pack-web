@@ -72,7 +72,7 @@ export const UpdateParcelDeliveryStatusModal = ({
         </ModalHeader>
         <ModalBody>
           <Text>
-            Do you want to update status parcel:{" "}
+            Do you want to update parcel status:{" "}
             <strong>{parcelData.trackingNumber}</strong> from{" "}
             <strong>{capitalize(parcelData.status)}</strong> to{" "}
             <strong>{capitalize(newStatus)}</strong>

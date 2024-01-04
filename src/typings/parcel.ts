@@ -23,6 +23,18 @@ export enum PARCEL_STATUS {
   CANCELLED = "CANCELLED",
 }
 
+export enum PARCEL_EVENT_TYPE {
+  PARCEL_CREATED = "PARCEL_CREATED",
+  COURIER_ASSIGNED_TO_PARCEL = "COURIER_ASSIGNED_TO_PARCEL",
+  COURIER_UNASSIGNED_FROM_PARCEL = "COURIER_UNASSIGNED_FROM_PARCEL",
+  PARCEL_STATUS_UPDATED = "PARCEL_STATUS_UPDATED",
+  PENDING = "PENDING",
+  IN_TRANSIT = "IN_TRANSIT",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED",
+  PARCEL_ARCHIVED = "PARCEL_ARCHIVED",
+}
+
 // parcel deliveries
 export type ParcelDelivery = {
   id: string;
@@ -58,7 +70,7 @@ export type ParcelDeliveryResponse = Paginated<ParcelDelivery>;
 
 export type ParcelDeliveryDetailsResponse = {
   details: ParcelDeliveryDetails;
-  history: { createdAt: string; status: PARCEL_STATUS }[];
+  history: { createdAt: string; status: PARCEL_EVENT_TYPE }[];
 };
 
 export type ParcelDeliveriesStatsResponse = {
@@ -66,9 +78,18 @@ export type ParcelDeliveriesStatsResponse = {
     totalParcelsCount: number;
     unresolvedParcelsCount: number;
     deliveredParcelsCount: number;
+    packagesCount: number;
   };
-  chartData: {
+  parcelsChartData: {
     hasData: boolean;
     items: ParcelDeliveryStatChartItem[];
+  };
+  groupPackagesByType: {
+    hasData: boolean;
+    items: Array<{ type: PACKAGE_TYPE; value: number }>;
+  };
+  packagesCountInParcel: {
+    hasData: boolean;
+    items: Array<{ packagesCount: number; parcelsCount: number }>;
   };
 };
